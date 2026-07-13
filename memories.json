@@ -1,0 +1,100 @@
+{
+  "lastSynced": "2026-07-13",
+  "syncedBy": "Claude Sonnet 4.6",
+  "version": 1,
+  "categories": [
+    {
+      "id": "identity",
+      "label": "Identity",
+      "icon": "ti-user",
+      "colorIndex": 0,
+      "facts": [
+        { "id": "i1", "label": "Samyak Bhadke",        "full": "Full name: Samyak Bhadke" },
+        { "id": "i2", "label": "Nagpur, India",          "full": "Location: Nagpur, Maharashtra, India" },
+        { "id": "i3", "label": "SB Jain Institute",      "full": "College: SB Jain Institute of Technology, Management & Research, Nagpur" },
+        { "id": "i4", "label": "CSE · 1st yr · CS25041", "full": "First-year Computer Science Engineering student. USN: CS25041" }
+      ]
+    },
+    {
+      "id": "projects",
+      "label": "Projects",
+      "icon": "ti-rocket",
+      "colorIndex": 1,
+      "facts": [
+        { "id": "p1",  "label": "Halcyon AI app",            "full": "Halcyon — Hinglish AI assistant Android app (Java, Pollinations.ai + Groq + Gemini)" },
+        { "id": "p2",  "label": "TaskBell v6",               "full": "TaskBell v6 — Android reminder app with Room DB, AlarmManager, live/video bg theme" },
+        { "id": "p3",  "label": "ORBIT DOCK",                "full": "ORBIT DOCK — Electron + React desktop hub, WebViews + ADB/scrcpy, NSIS .exe installer" },
+        { "id": "p4",  "label": "PDF Vault v4",              "full": "PDF Vault v4 — Android PDF manager with AI chat, PdfBox full-text indexing" },
+        { "id": "p5",  "label": "Vibewall",                  "full": "Vibewall — Android AI wallpaper generator via Pollinations.ai, Room DB favorites" },
+        { "id": "p6",  "label": "Portfolio site",            "full": "Portfolio: samyakb32-sys.github.io/My-Portfolio — single HTML, base64 assets, 3D sphere" },
+        { "id": "p7",  "label": "Shoply",                    "full": "Shoply — Supabase marketplace at shoply-phi-ecru.vercel.app (multi-seller + admin)" },
+        { "id": "p8",  "label": "SyllaSync v3.1",            "full": "SyllaSync v3.1 — student PWA (AI study planner, PYQ explainer, bunk calculator)" },
+        { "id": "p9",  "label": "TemplateForge",             "full": "TemplateForge — Canva-like template customization tool with AI suggestions + code export" },
+        { "id": "p10", "label": "Freelancer @SamyakPathan",  "full": "Freelancing on Freelancer.in as @SamyakPathan — no-interview preferred" }
+      ]
+    },
+    {
+      "id": "challenge",
+      "label": "Challenge",
+      "icon": "ti-trophy",
+      "colorIndex": 2,
+      "facts": [
+        { "id": "c1", "label": "Day 1 — Ambient room",  "full": "Day 1 complete: Mood-Based Ambient Room" },
+        { "id": "c2", "label": "Day 2 — Code roast",    "full": "Day 2 complete: Code Roast Arena" },
+        { "id": "c3", "label": "Day 5 — DevForge IDE",  "full": "Day 5 complete: DevForge IDE" },
+        { "id": "c4", "label": "Day 6 — Song capsule",  "full": "Day 6 complete: Song Meaning Time Capsule" },
+        { "id": "c5", "label": "Day 7 — NPC quiz",      "full": "Day 7 complete: NPC or Main Character? (RPG evaluator)" },
+        { "id": "c6", "label": "Day 8 — HabitLoop",     "full": "Day 8 complete: HabitLoop — offline habit tracker PWA" },
+        { "id": "c7", "label": "Day 9 — JD scanner",    "full": "Day 9 complete: JD Bias Scanner" },
+        { "id": "c8", "label": "7 / 15 done",           "full": "15-Day Build Challenge: 7 of 15 done. All single-file HTML/CSS/JS + Pollinations.ai" }
+      ]
+    },
+    {
+      "id": "stack",
+      "label": "Tech Stack",
+      "icon": "ti-code",
+      "colorIndex": 3,
+      "facts": [
+        { "id": "s1", "label": "Android + Java",     "full": "Android in Java — main mobile stack (Room DB, AlarmManager, RecyclerView)" },
+        { "id": "s2", "label": "HTML / CSS / JS",    "full": "Vanilla HTML/CSS/JS — default for single-file projects and 15-Day Challenge" },
+        { "id": "s3", "label": "React + Electron",   "full": "React + Electron — used for ORBIT DOCK desktop hub" },
+        { "id": "s4", "label": "Pollinations.ai",    "full": "Pollinations.ai — free keyless AI backend (text + image). Core of all challenge projects" },
+        { "id": "s5", "label": "Groq + Gemini",      "full": "Groq (llama-3.3-70b) + Gemini API — AI fallbacks alongside Pollinations" },
+        { "id": "s6", "label": "GitHub Pages",       "full": "GitHub Pages — main deploy. samyakb32-sys (Android), samyakbcse25 (web/college)" },
+        { "id": "s7", "label": "Vercel + Supabase",  "full": "Vercel + Supabase — used for Shoply marketplace" },
+        { "id": "s8", "label": "Three.js + GSAP",    "full": "Three.js + GSAP — 3D scenes and scroll animations" }
+      ]
+    },
+    {
+      "id": "prefs",
+      "label": "Preferences",
+      "icon": "ti-adjustments",
+      "colorIndex": 4,
+      "facts": [
+        { "id": "pr1", "label": "Hinglish",            "full": "Communicates in Hinglish (Hindi-English mix). Claude always responds in Hinglish" },
+        { "id": "pr2", "label": "Phone-first dev",     "full": "Phone-first workflow; GitHub Actions for cloud APK builds when laptop unavailable" },
+        { "id": "pr3", "label": "Anime + One Piece",   "full": "Interests: anime, streetwear aesthetics, One Piece" },
+        { "id": "pr4", "label": "Free APIs only",      "full": "Prefers free/keyless AI APIs — Pollinations.ai is the cornerstone" },
+        { "id": "pr5", "label": "Neutral UI default",  "full": "Standard/neutral styling by default — NOT dark/neon unless specifically asked" },
+        { "id": "pr6", "label": "Freelancer.in pref",  "full": "Prefers no-interview freelance on Freelancer.in over Internshala" }
+      ]
+    },
+    {
+      "id": "design",
+      "label": "Design Refs",
+      "icon": "ti-palette",
+      "colorIndex": 5,
+      "facts": [
+        { "id": "d1", "label": "animmasterlib.dev",  "full": "animmasterlib.dev — animation library (page-load and scroll)" },
+        { "id": "d2", "label": "skiper-ui.com",      "full": "skiper-ui.com — modern UI component library" },
+        { "id": "d3", "label": "vengenceui.com",     "full": "vengenceui.com — bold dark UI library" },
+        { "id": "d4", "label": "motionsites.ai",     "full": "motionsites.ai — 7 signature motions: aurora, fluid, magnetic, noise field, etc." },
+        { "id": "d5", "label": "getdesign.md",       "full": "getdesign.md — brand design systems and tokens (Vercel, Linear, Framer style)" },
+        { "id": "d6", "label": "21st.dev",           "full": "21st.dev/community/components/featured — featured React UI components" },
+        { "id": "d7", "label": "dialedweb.com",      "full": "dialedweb.com — premium agency website reference" },
+        { "id": "d8", "label": "rocket.new",         "full": "rocket.new/templates — landing page template references" },
+        { "id": "d9", "label": "dotmatrix loaders",  "full": "dotmatrix.zzzzshawn.cloud — dot matrix loader animations" }
+      ]
+    }
+  ]
+}
