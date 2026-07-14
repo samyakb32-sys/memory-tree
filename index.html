@@ -6,12 +6,11 @@
 <title>Memory Tree 3D</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:#03030a;color:#e2e8f0;font-family:"Space Grotesk",system-ui,sans-serif;overflow:hidden}
+html,body{height:100%;background:#07070f;color:#e2e8f0;font-family:"Space Grotesk",system-ui,sans-serif;overflow:hidden}
 .app{display:flex;flex-direction:column;height:100vh}
-.topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(5,5,15,0.75);border-bottom:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(16px);flex-shrink:0;flex-wrap:wrap;backdrop-filter:blur(10px);position:relative;z-index:50}
+.topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#07070fdd;border-bottom:1px solid #1a1a2e;flex-shrink:0;flex-wrap:wrap;backdrop-filter:blur(10px);position:relative;z-index:50}
 .logo{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#a78bfa;letter-spacing:.3px}
 .badge{font-size:9px;color:#34d399;background:#34d39910;border:1px solid #34d39928;border-radius:20px;padding:2px 8px;letter-spacing:.5px}
 .date{font-size:10px;color:#334155;margin-left:auto}
@@ -67,13 +66,7 @@ html,body{height:100%;background:#03030a;color:#e2e8f0;font-family:"Space Grotes
 </style>
 </head>
 <body>
-<div id="spline-bg" style="position:fixed;inset:0;z-index:0;pointer-events:none">
-  <spline-viewer url="https://prod.spline.design/PBQQBw8bfXDhBo7w/scene.splinecode"
-    loading-anim-type="none"
-    style="width:100%;height:100%;display:block">
-  </spline-viewer>
-</div>
-<div class="app" style="position:relative;z-index:1">
+<div class="app">
 <div class="topbar">
   <div class="logo">&#129504; Memory Tree</div>
   <div class="badge">3D</div>
@@ -212,16 +205,29 @@ var PAL=[
 var wrap=document.getElementById("wrap");
 var canvas=document.getElementById("c");
 var scene=new THREE.Scene();
-/* transparent bg — Spline handles it */
+scene.background=new THREE.Color(0x07070f);
 var W=wrap.clientWidth,H=wrap.clientHeight;
 var camera=new THREE.PerspectiveCamera(55,W/H,0.1,5000);
 camera.position.set(0,0,520);
-var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.setSize(W,H);
-renderer.setClearColor(0x000000,0);
 
-/* Stars removed — Spline BG provides atmosphere */
+/* Stars — bigger & brighter */
+(function(){
+  var pts=[];
+  for(var i=0;i<700;i++)pts.push((Math.random()-.5)*2800,(Math.random()-.5)*2800,(Math.random()-.5)*2800);
+  var g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(pts,3));
+  /* Large bright stars */
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:2.8,transparent:true,opacity:0.9,sizeAttenuation:true})));
+  /* Medium stars layer */
+  var pts2=[];
+  for(var j=0;j<400;j++)pts2.push((Math.random()-.5)*2400,(Math.random()-.5)*2400,(Math.random()-.5)*2400);
+  var g2=new THREE.BufferGeometry();
+  g2.setAttribute("position",new THREE.Float32BufferAttribute(pts2,3));
+  scene.add(new THREE.Points(g2,new THREE.PointsMaterial({color:0xc4b5fd,size:1.8,transparent:true,opacity:0.7,sizeAttenuation:true})));
+})();
 
 /* Lights */
 scene.add(new THREE.AmbientLight(0xffffff,0.7));
