@@ -245,6 +245,17 @@ function mkLine(pts,col,op){
   var m=new THREE.LineBasicMaterial({color:col,transparent:true,opacity:op});
   return new THREE.Line(g,m);
 }
+function mkTube(p1,p2,col,op,r){
+  var dir=new THREE.Vector3().subVectors(p2,p1);
+  var len=dir.length();
+  if(len<0.01)return new THREE.Object3D();
+  var geo=new THREE.CylinderGeometry(r,r,len,6,1,false);
+  var mat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op});
+  var mesh=new THREE.Mesh(geo,mat);
+  mesh.position.copy(new THREE.Vector3().addVectors(p1,p2).multiplyScalar(0.5));
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());
+  return mesh;
+}
 function fibSphere(n,r){
   var pts=[],phi=Math.PI*(3-Math.sqrt(5));
   for(var i=0;i<n;i++){
@@ -301,7 +312,7 @@ CATS.forEach(function(cat,i){
   cgl.position.set(cx,cy,cz);pivot.add(cgl);
 
   /* Center → cat line */
-  pivot.add(mkLine([new THREE.Vector3(0,0,0),new THREE.Vector3(cx,cy,cz)],pl.h,0.25));
+  pivot.add(mkTube(new THREE.Vector3(0,0,0),new THREE.Vector3(cx,cy,cz),pl.h,0.45,1.2));
 
   /* Label */
   var lbl=mkLbl(cat.id,cat.emoji+" "+cat.label,cat.facts.length+" nodes",pl.c);
@@ -318,7 +329,7 @@ CATS.forEach(function(cat,i){
     fm.position.set(wx,wy,wz);
     fm.userData={type:"fact",fact:fact,cat:cat};
     pivot.add(fm);clickable.push(fm);factMesh[fact.id]=fm;
-    pivot.add(mkLine([new THREE.Vector3(cx,cy,cz),new THREE.Vector3(wx,wy,wz)],pl.h,0.12));
+    pivot.add(mkTube(new THREE.Vector3(cx,cy,cz),new THREE.Vector3(wx,wy,wz),pl.h,0.3,0.6));
   });
 });
 
@@ -327,7 +338,7 @@ Object.keys(CROSS).forEach(function(type){
   CROSS[type].forEach(function(pair){
     var p1=factPos3D[pair[0]],p2=factPos3D[pair[1]];
     if(!p1||!p2)return;
-    var line=mkLine([new THREE.Vector3(p1.x,p1.y,p1.z),new THREE.Vector3(p2.x,p2.y,p2.z)],CROSS_INT[type],0.1);
+    var line=mkTube(new THREE.Vector3(p1.x,p1.y,p1.z),new THREE.Vector3(p2.x,p2.y,p2.z),CROSS_INT[type],0.18,0.45);
     crossLines.push({line:line,pair:pair,type:type});
     pivot.add(line);
   });
