@@ -2,400 +2,323 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Memory Tree — Samyak's Brain</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Memory Tree</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── CONFIG: paste your Gist raw URL below ── */
-/* GIST_URL is set in the CONFIG object in <script> */
-
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:#07070f;color:#e2e8f0;font-family:'Space Grotesk',system-ui,sans-serif}
-
-/* Layout */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#07070f;color:#e2e8f0;font-family:"Space Grotesk",system-ui,sans-serif;overflow:hidden}
 .app{display:flex;flex-direction:column;height:100vh}
-.topbar{display:flex;align-items:center;gap:12px;padding:10px 18px;background:#0d0d1a;border-bottom:1px solid #1e1e30;flex-shrink:0;flex-wrap:wrap}
-.tb-logo{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#a78bfa}
-.tb-logo i{font-size:18px}
-.tb-source{font-size:10px;color:#475569;background:#111122;border:1px solid #1e1e30;border-radius:20px;padding:3px 10px;display:flex;align-items:center;gap:5px}
-.tb-source.gist{border-color:#34d39944;color:#34d399}
-.tb-source.repo{border-color:#60a5fa44;color:#60a5fa}
-.tb-source.default{border-color:#f97316;color:#f97316}
-.tb-synced{font-size:10px;color:#475569;margin-left:auto}
-.tb-synced b{color:#94a3b8}
-.tb-search{padding:5px 12px;border-radius:20px;background:#111122;border:1px solid #1e1e30;color:#e2e8f0;font-size:11px;font-family:inherit;outline:none;width:160px}
-.tb-search:focus{border-color:#a78bfa55}
-.tb-search::placeholder{color:#334155}
-.tb-clr{background:none;border:none;color:#475569;cursor:pointer;font-size:13px;padding:0 2px}
-.tb-sync{margin-left:4px;padding:5px 12px;border-radius:20px;background:#1e1e30;border:1px solid #2d2d4a;color:#a78bfa;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;transition:background .2s}
-.tb-sync:hover{background:#2d2d4a}
-
-/* Main area */
+.topbar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:#0d0d1a;border-bottom:1px solid #1e1e30;flex-shrink:0;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#a78bfa}
+.badge{font-size:10px;color:#34d399;background:#34d39912;border:1px solid #34d39930;border-radius:20px;padding:2px 8px}
+.date{font-size:10px;color:#475569;margin-left:auto;white-space:nowrap}
+.date b{color:#64748b}
+.srch{padding:5px 11px;border-radius:20px;background:#111122;border:1px solid #1e1e30;color:#e2e8f0;font-size:11px;font-family:inherit;outline:none;width:120px}
+.srch::placeholder{color:#334155}
+.clr{background:none;border:none;color:#475569;cursor:pointer;font-size:12px}
+.synbtn{padding:5px 10px;border-radius:20px;background:#1e1e30;border:1px solid #2d2d4a;color:#a78bfa;font-size:10px;cursor:pointer;font-family:inherit;white-space:nowrap}
 .main{display:flex;flex:1;overflow:hidden}
 .canvas{flex:1;position:relative;overflow:hidden}
-.nodes{position:absolute;inset:0;pointer-events:none}
-.node-layer{position:absolute;inset:0}
-
-/* Center node */
-.center-node{position:absolute;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#7c3aed,#3b0764);border:1.5px solid #a78bfa55;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:default;z-index:20;animation:brainPulse 3s ease-in-out infinite}
-.center-node i{font-size:22px;color:#ddd6fe}
-.center-node .cn-lbl{font-size:8px;font-weight:600;color:#ddd6fe;text-align:center;margin-top:2px;letter-spacing:.3px}
-
-/* Category nodes */
-.cat-node{position:absolute;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;z-index:20;border:1.5px solid;transition:all .22s ease;pointer-events:all}
-.cat-node:hover{transform:translate(-50%,-50%) scale(1.1)}
-.cat-node.active{width:64px;height:64px}
-.cat-node i{font-size:16px}
-.cat-node .cn-lbl{font-size:7.5px;font-weight:500;text-align:center;margin-top:2px;padding:0 3px;line-height:1.2}
-
-/* Fact chips */
-.fact-chip{position:absolute;transform:translate(-50%,-50%);padding:3px 8px;border-radius:12px;border:1px solid;cursor:pointer;font-size:9px;white-space:nowrap;max-width:115px;overflow:hidden;text-overflow:ellipsis;z-index:25;transition:all .15s ease;pointer-events:all}
-.fact-chip.sel{font-weight:600}
-
-/* Stats bar */
-.statsbar{position:absolute;bottom:0;left:0;right:0;display:flex;gap:18px;padding:7px 16px;background:#0d0d1acc;backdrop-filter:blur(8px);border-top:1px solid #1e1e30;font-size:10px;color:#475569;flex-wrap:wrap}
+.canvas svg{position:absolute;inset:0;width:100%;height:100%}
+.statsbar{position:absolute;bottom:0;left:0;right:0;display:flex;gap:12px;padding:6px 14px;background:#0d0d1acc;border-top:1px solid #1e1e30;font-size:10px;color:#475569;flex-wrap:wrap;z-index:10}
 .statsbar b{color:#94a3b8;font-weight:500}
-
-/* Loading / error */
-.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#07070f;z-index:100}
-.overlay i{font-size:36px;color:#334155}
-.overlay p{font-size:13px;color:#475569}
-.spinner{width:32px;height:32px;border:2px solid #1e1e30;border-top-color:#a78bfa;border-radius:50%;animation:spin .8s linear infinite}
-
-/* Panel */
-.panel{width:280px;border-left:1px solid #1e1e30;display:flex;flex-direction:column;overflow:hidden;background:#0a0a16}
-.phead{padding:13px 14px 9px;border-bottom:1px solid #1e1e30;flex-shrink:0}
-.phead .ptitle{font-size:11px;font-weight:600;color:#e2e8f0;display:flex;align-items:center;gap:6px}
-.phead .ptitle i{font-size:14px}
-.phead .psub{font-size:10px;color:#475569;margin-top:2px}
-.pbody{flex:1;overflow-y:auto;padding:10px}
-.pbody::-webkit-scrollbar{width:3px}.pbody::-webkit-scrollbar-thumb{background:#1e1e30;border-radius:2px}
-
-/* Panel items */
-.fact-detail{padding:10px 12px;border-radius:8px;border:1px solid;margin-bottom:9px}
-.fcat-label{font-size:9px;font-weight:600;letter-spacing:.6px;margin-bottom:5px;text-transform:uppercase}
-.ftext{font-size:12px;color:#e2e8f0;line-height:1.65}
-.copy-btn{width:100%;padding:7px;border-radius:8px;background:#111122;border:1px solid #1e1e30;color:#64748b;cursor:pointer;font-size:10px;font-family:inherit;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .15s}
-.copy-btn:hover{background:#1e1e30;color:#94a3b8}
-.sec-head{font-size:9px;color:#334155;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px}
-.rel-item{padding:6px 10px;border-radius:8px;border:1px solid #1e1e3044;margin-bottom:4px;cursor:pointer;font-size:10px;color:#64748b;background:#111122;transition:all .15s}
-.rel-item:hover{color:#94a3b8;border-color:#2d2d4a}
-.list-item{padding:8px 10px;border-radius:8px;border:1px solid #1e1e30;margin-bottom:6px;cursor:pointer;background:#111122;transition:background .15s}
-.list-item:hover{background:#1e1e30}
-.li-title{font-size:11px;color:#e2e8f0;font-weight:500}
-.li-sub{font-size:9px;color:#475569;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.empty{text-align:center;padding:40px 16px;color:#334155}
-.empty i{font-size:40px;display:block;margin-bottom:12px}
-.empty p{font-size:11px;line-height:1.8}
-
-/* Sync modal */
-.modal-bg{position:fixed;inset:0;background:#000000aa;z-index:200;display:flex;align-items:center;justify-content:center}
-.modal{background:#0d0d1a;border:1px solid #2d2d4a;border-radius:12px;padding:24px;width:460px;max-width:90vw}
-.modal h3{font-size:15px;font-weight:600;color:#e2e8f0;margin-bottom:6px}
-.modal p{font-size:12px;color:#64748b;line-height:1.7;margin-bottom:12px}
-.modal .steps{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-.modal .step{display:flex;gap:10px;align-items:flex-start}
-.modal .step-num{width:20px;height:20px;border-radius:50%;background:#a78bfa22;border:1px solid #a78bfa44;color:#a78bfa;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.modal .step-text{font-size:11px;color:#94a3b8;line-height:1.6}
-.modal code{font-family:'Space Mono',monospace;font-size:10px;background:#111122;border:1px solid #1e1e30;border-radius:4px;padding:2px 6px;color:#a78bfa}
-.modal-close{width:100%;padding:8px;border-radius:8px;background:#a78bfa22;border:1px solid #a78bfa44;color:#a78bfa;cursor:pointer;font-size:12px;font-family:inherit;transition:background .2s}
-.modal-close:hover{background:#a78bfa33}
-
-@keyframes brainPulse{0%,100%{box-shadow:0 0 20px #7c3aed55}50%{box-shadow:0 0 35px #a78bfa77}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes fadeIn{from{opacity:0;transform:translate(-50%,-50%) scale(.5)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.panel{width:270px;border-left:1px solid #1e1e30;display:flex;flex-direction:column;overflow:hidden;background:#0a0a16}
+.ph{padding:11px 13px 8px;border-bottom:1px solid #1e1e30;flex-shrink:0}
+.pt{font-size:11px;font-weight:600;color:#e2e8f0}
+.ps{font-size:10px;color:#475569;margin-top:2px}
+.pb{flex:1;overflow-y:auto;padding:9px}
+.pb::-webkit-scrollbar{width:3px}
+.pb::-webkit-scrollbar-thumb{background:#1e1e30;border-radius:2px}
+.drawer{position:fixed;left:0;right:0;bottom:0;z-index:100;background:#0d0d1a;border-top:1px solid #2d2d4a;border-radius:16px 16px 0 0;max-height:60vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .28s ease}
+.drawer.open{transform:translateY(0)}
+.dhandle{width:32px;height:3px;background:#2d2d4a;border-radius:2px;margin:9px auto 0}
+.dhead{padding:9px 14px 8px;border-bottom:1px solid #1e1e30;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.dtitle{font-size:12px;font-weight:600;color:#e2e8f0}
+.dclose{background:none;border:none;color:#475569;cursor:pointer;font-size:15px}
+.dbody{overflow-y:auto;padding:10px;-webkit-overflow-scrolling:touch}
+.fdet{padding:10px 12px;border-radius:8px;border:1px solid;margin-bottom:9px}
+.fcl{font-size:9px;font-weight:600;letter-spacing:.6px;margin-bottom:5px;text-transform:uppercase}
+.ftxt{font-size:12px;color:#e2e8f0;line-height:1.65}
+.cpbtn{width:100%;padding:7px;border-radius:8px;background:#111122;border:1px solid #1e1e30;color:#64748b;cursor:pointer;font-size:10px;font-family:inherit;margin-bottom:10px}
+.sh{font-size:9px;color:#334155;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px}
+.ri{padding:6px 10px;border-radius:8px;border:1px solid #1e1e3044;margin-bottom:4px;cursor:pointer;font-size:10px;color:#64748b;background:#111122}
+.li{padding:8px 10px;border-radius:8px;border:1px solid #1e1e30;margin-bottom:6px;cursor:pointer;background:#111122}
+.lt{font-size:11px;color:#e2e8f0;font-weight:500}
+.ls{font-size:9px;color:#475569;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.emp{text-align:center;padding:32px 16px;color:#334155}
+.modal-bg{position:fixed;inset:0;background:#000b;z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:#0d0d1a;border:1px solid #2d2d4a;border-radius:16px 16px 0 0;padding:20px 20px 28px;width:100%;max-width:480px}
+.modal h3{font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:8px}
+.modal p{font-size:11px;color:#64748b;line-height:1.7;margin-bottom:10px}
+.ms{display:flex;gap:10px;margin-bottom:9px}
+.mn{width:20px;height:20px;border-radius:50%;background:#a78bfa20;border:1px solid #a78bfa44;color:#a78bfa;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.mt{font-size:11px;color:#94a3b8;line-height:1.6}
+.mt code{font-family:monospace;font-size:10px;background:#111122;border:1px solid #1e1e30;border-radius:4px;padding:1px 5px;color:#a78bfa}
+.mcl{width:100%;padding:9px;border-radius:8px;background:#a78bfa20;border:1px solid #a78bfa44;color:#a78bfa;cursor:pointer;font-size:12px;font-family:inherit;margin-top:6px}
+@media(max-width:640px){.panel{display:none}}
+@media(min-width:641px){.drawer{display:none!important}}
 </style>
 </head>
 <body>
-
-<!-- ─────────────────────────────────────────────
-     CONFIG — paste your Gist raw URL here
-───────────────────────────────────────────── -->
-<script>
-const CONFIG = {
-  // Step 1: Create a Gist at https://gist.github.com with memories.json content
-  // Step 2: Click "Raw" on the Gist → copy that URL → paste below
-  gistUrl: '',   // e.g. 'https://gist.githubusercontent.com/samyakbcse25/abc123/raw/memories.json'
-  repoFallback: './memories.json'
-};
-</script>
-
 <div class="app">
-
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="tb-logo"><i class="ti ti-brain" aria-hidden="true"></i> Memory Tree</div>
-    <div class="tb-source" id="sourceTag"><i class="ti ti-loader" aria-hidden="true"></i> loading…</div>
-    <span class="tb-synced">Last synced: <b id="syncDate">—</b></span>
-    <input class="tb-search" type="text" id="srch" placeholder="search memories…" oninput="onSearch(this.value)">
-    <button class="tb-clr" id="clrBtn" style="display:none" onclick="clearSearch()" aria-label="Clear">
-      <i class="ti ti-x" aria-hidden="true"></i>
-    </button>
-    <button class="tb-sync" onclick="showSyncModal()">
-      <i class="ti ti-refresh" aria-hidden="true"></i> How to sync
-    </button>
+<div class="topbar">
+  <div class="logo">&#129504; Memory Tree</div>
+  <div class="badge">&#10003; live</div>
+  <span class="date">Synced: <b id="sd">-</b></span>
+  <input class="srch" id="srch" type="text" placeholder="search..." oninput="onSearch(this.value)">
+  <button class="clr" id="clrBtn" style="display:none" onclick="clearSearch()">&#x2715;</button>
+  <button class="synbtn" onclick="showModal()">&#8635; Sync</button>
+</div>
+<div class="main">
+  <div class="canvas" id="canvas">
+    <svg id="tree" viewBox="0 0 600 460" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="statsbar">
+      <span><b id="stTotal">0</b> memories</span>
+      <span><b style="color:#60a5fa">10</b> projects</span>
+      <span><b style="color:#34d399">7/15</b> days</span>
+      <span><b style="color:#f472b6">9</b> refs</span>
+    </div>
   </div>
-
-  <!-- MAIN -->
-  <div class="main">
-
-    <!-- CANVAS -->
-    <div class="canvas" id="canvas">
-      <div class="overlay" id="overlay">
-        <div class="spinner"></div>
-        <p>Loading memories…</p>
-      </div>
-      <svg id="svgLines" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"
-           viewBox="0 0 600 480" preserveAspectRatio="none"></svg>
-      <div class="node-layer" id="nodeLayer"></div>
-      <div class="statsbar" id="statsbar" style="display:none">
-        <span><b id="statTotal">0</b> memories</span>
-        <span><i class="ti ti-rocket" aria-hidden="true" style="color:#60a5fa"></i> <b>10</b> projects</span>
-        <span><i class="ti ti-trophy" aria-hidden="true" style="color:#34d399"></i> <b>7/15</b> days</span>
-        <span><i class="ti ti-palette" aria-hidden="true" style="color:#f472b6"></i> <b>9</b> design refs</span>
-      </div>
-    </div>
-
-    <!-- PANEL -->
-    <div class="panel">
-      <div class="phead">
-        <div class="ptitle" id="ptitle"><i class="ti ti-brain" aria-hidden="true" style="color:#a78bfa"></i> Memory Fetch</div>
-        <div class="psub" id="psub">Click a node to inspect</div>
-      </div>
-      <div class="pbody" id="panelBody">
-        <div class="empty">
-          <i class="ti ti-brain" aria-hidden="true"></i>
-          <p>Click any category<br>to explore memories</p>
-        </div>
-      </div>
-    </div>
-
+  <div class="panel">
+    <div class="ph"><div class="pt" id="dpt">Memory Fetch</div><div class="ps" id="dps">Click a node</div></div>
+    <div class="pb" id="dpb"><div class="emp"><p style="font-size:28px;margin-bottom:8px">&#129504;</p><p style="font-size:11px;line-height:1.8">Click any category<br>to explore memories</p></div></div>
   </div>
 </div>
+</div>
 
-<!-- SYNC MODAL -->
-<div class="modal-bg" id="syncModal" style="display:none" onclick="if(event.target===this)hideSyncModal()">
+<div class="drawer" id="drawer">
+  <div class="dhandle"></div>
+  <div class="dhead">
+    <div class="dtitle" id="dtitle">Memory Fetch</div>
+    <button class="dclose" onclick="closeDrawer()">&#x2715;</button>
+  </div>
+  <div class="dbody" id="dbody"></div>
+</div>
+
+<div class="modal-bg" id="modal" style="display:none" onclick="if(event.target===this)hideModal()">
   <div class="modal">
-    <h3><i class="ti ti-refresh" aria-hidden="true" style="color:#a78bfa"></i> How to sync memories</h3>
-    <p>This tree reads from a GitHub Gist. When Claude learns something new about you, sync in 3 steps:</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-text">In any Claude chat, type: <code>sync my memory tree</code><br>Claude will output a fresh <code>memories.json</code></div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-text">Go to your Gist → click <b>Edit</b> → paste the new JSON → click <b>Update public gist</b></div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-text">Refresh this page — the tree will load fresh data automatically from your Gist</div>
-      </div>
-    </div>
-    <p style="font-size:10px;color:#334155">Also commit <code>memories.json</code> to your repo as a backup anytime.</p>
-    <button class="modal-close" onclick="hideSyncModal()">Got it</button>
+    <h3>How to sync</h3>
+    <p>When Claude learns something new, update in 3 steps:</p>
+    <div class="ms"><div class="mn">1</div><div class="mt">In any Claude chat, type <code>sync my memory tree</code></div></div>
+    <div class="ms"><div class="mn">2</div><div class="mt">Open <code>index.html</code>, find <code>MEMORY_DATA</code>, replace with new data</div></div>
+    <div class="ms"><div class="mn">3</div><div class="mt">Commit and push to GitHub</div></div>
+    <button class="mcl" onclick="hideModal()">Got it</button>
   </div>
 </div>
 
 <script>
-/* ── Color palette (6 categories) ── */
-const PALETTE = [
-  {c:'#a78bfa', bg:'#a78bfa18', border:'#a78bfa44', text:'#ddd6fe'},  /* purple  - identity  */
-  {c:'#60a5fa', bg:'#60a5fa18', border:'#60a5fa44', text:'#bfdbfe'},  /* blue    - projects  */
-  {c:'#34d399', bg:'#34d39918', border:'#34d39944', text:'#a7f3d0'},  /* green   - challenge */
-  {c:'#fbbf24', bg:'#fbbf2418', border:'#fbbf2444', text:'#fde68a'},  /* amber   - stack     */
-  {c:'#f97316', bg:'#f9731618', border:'#f9731644', text:'#fed7aa'},  /* orange  - prefs     */
-  {c:'#f472b6', bg:'#f472b618', border:'#f472b644', text:'#fbcfe8'},  /* pink    - design    */
+var MEMORY_DATA = {
+  lastSynced: "2026-07-14",
+  categories: [
+    { id:"identity", label:"Identity", emoji:"👤", ci:0, facts:[
+      { id:"i1", label:"Samyak Bhadke", full:"Full name: Samyak Bhadke" },
+      { id:"i2", label:"Nagpur, India", full:"Location: Nagpur, Maharashtra, India" },
+      { id:"i3", label:"SB Jain Institute", full:"College: SB Jain Institute of Technology, Management & Research" },
+      { id:"i4", label:"CSE 1st yr CS25041", full:"First-year Computer Science Engineering. USN: CS25041" }
+    ]},
+    { id:"projects", label:"Projects", emoji:"🚀", ci:1, facts:[
+      { id:"p1", label:"Halcyon AI app", full:"Halcyon: Hinglish AI assistant Android app (Java, Pollinations.ai + Groq + Gemini)" },
+      { id:"p2", label:"TaskBell v6", full:"TaskBell v6: Android reminder app (Room DB, AlarmManager, live/video bg theme)" },
+      { id:"p3", label:"ORBIT DOCK", full:"ORBIT DOCK: Electron + React desktop hub with WebViews + ADB/scrcpy, NSIS installer" },
+      { id:"p4", label:"PDF Vault v4", full:"PDF Vault v4: Android PDF manager with AI chat, PdfBox full-text indexing" },
+      { id:"p5", label:"Vibewall", full:"Vibewall: Android AI wallpaper generator via Pollinations.ai, Room DB favorites" },
+      { id:"p6", label:"Portfolio site", full:"Portfolio: samyakb32-sys.github.io/My-Portfolio, single HTML, base64 assets, 3D sphere" },
+      { id:"p7", label:"Shoply", full:"Shoply: Supabase marketplace at shoply-phi-ecru.vercel.app (multi-seller + admin)" },
+      { id:"p8", label:"SyllaSync v3.1", full:"SyllaSync v3.1: student PWA with AI study planner, PYQ explainer, bunk calculator" },
+      { id:"p9", label:"TemplateForge", full:"TemplateForge: Canva-like template customization tool with AI suggestions + code export" },
+      { id:"p10", label:"Freelancer @SamyakPathan", full:"Freelancing on Freelancer.in as @SamyakPathan, no-interview preferred" }
+    ]},
+    { id:"challenge", label:"Challenge", emoji:"🏆", ci:2, facts:[
+      { id:"c1", label:"Day 1 Ambient room", full:"Day 1 complete: Mood-Based Ambient Room" },
+      { id:"c2", label:"Day 2 Code roast", full:"Day 2 complete: Code Roast Arena" },
+      { id:"c3", label:"Day 5 DevForge IDE", full:"Day 5 complete: DevForge IDE" },
+      { id:"c4", label:"Day 6 Song capsule", full:"Day 6 complete: Song Meaning Time Capsule" },
+      { id:"c5", label:"Day 7 NPC quiz", full:"Day 7 complete: NPC or Main Character? (RPG evaluator)" },
+      { id:"c6", label:"Day 8 HabitLoop", full:"Day 8 complete: HabitLoop offline habit tracker PWA" },
+      { id:"c7", label:"Day 9 JD scanner", full:"Day 9 complete: JD Bias Scanner" },
+      { id:"c8", label:"7 of 15 done", full:"15-Day Build Challenge: 7 of 15 complete. All single-file HTML/CSS/JS + Pollinations.ai" }
+    ]},
+    { id:"stack", label:"Stack", emoji:"⚙️", ci:3, facts:[
+      { id:"s1", label:"Android + Java", full:"Android in Java: main mobile stack (Room DB, AlarmManager, RecyclerView)" },
+      { id:"s2", label:"HTML CSS JS", full:"Vanilla HTML/CSS/JS: default for single-file projects and 15-Day Challenge" },
+      { id:"s3", label:"React + Electron", full:"React + Electron: used for ORBIT DOCK desktop hub" },
+      { id:"s4", label:"Pollinations.ai", full:"Pollinations.ai: free keyless AI backend (text + image). Core of all challenge projects" },
+      { id:"s5", label:"Groq + Gemini", full:"Groq (llama-3.3-70b) + Gemini API: AI fallbacks alongside Pollinations" },
+      { id:"s6", label:"GitHub Pages", full:"GitHub Pages: main deploy. samyakb32-sys (Android), samyakbcse25 (web/college)" },
+      { id:"s7", label:"Vercel + Supabase", full:"Vercel + Supabase: used for Shoply marketplace" },
+      { id:"s8", label:"Three.js + GSAP", full:"Three.js + GSAP: 3D scenes and scroll animations" }
+    ]},
+    { id:"prefs", label:"Prefs", emoji:"🎯", ci:4, facts:[
+      { id:"pr1", label:"Hinglish", full:"Communicates in Hinglish (Hindi-English mix). Claude always responds in Hinglish" },
+      { id:"pr2", label:"Phone-first dev", full:"Phone-first workflow; GitHub Actions for cloud APK builds when laptop unavailable" },
+      { id:"pr3", label:"Anime + One Piece", full:"Interests: anime, streetwear aesthetics, One Piece" },
+      { id:"pr4", label:"Free APIs only", full:"Prefers free/keyless AI APIs. Pollinations.ai is the cornerstone" },
+      { id:"pr5", label:"Neutral UI default", full:"Standard/neutral styling by default, NOT dark/neon unless specifically asked" },
+      { id:"pr6", label:"Freelancer.in pref", full:"Prefers no-interview freelance on Freelancer.in over Internshala" }
+    ]},
+    { id:"design", label:"Design", emoji:"🎨", ci:5, facts:[
+      { id:"d1", label:"animmasterlib.dev", full:"animmasterlib.dev: animation library for page-load and scroll" },
+      { id:"d2", label:"skiper-ui.com", full:"skiper-ui.com: modern UI component library" },
+      { id:"d3", label:"vengenceui.com", full:"vengenceui.com: bold dark UI library" },
+      { id:"d4", label:"motionsites.ai", full:"motionsites.ai: 7 signature motions: aurora, fluid, magnetic, noise field" },
+      { id:"d5", label:"getdesign.md", full:"getdesign.md: brand design systems and tokens (Vercel, Linear, Framer style)" },
+      { id:"d6", label:"21st.dev", full:"21st.dev: featured React UI components" },
+      { id:"d7", label:"dialedweb.com", full:"dialedweb.com: premium agency website reference" },
+      { id:"d8", label:"rocket.new", full:"rocket.new/templates: landing page template references" },
+      { id:"d9", label:"dotmatrix loaders", full:"dotmatrix.zzzzshawn.cloud: dot matrix loader animations" }
+    ]}
+  ]
+};
+
+var PAL = [
+  {c:"#a78bfa",bg:"#a78bfa22",bd:"#a78bfa66",tx:"#ddd6fe"},
+  {c:"#60a5fa",bg:"#60a5fa22",bd:"#60a5fa66",tx:"#bfdbfe"},
+  {c:"#34d399",bg:"#34d39922",bd:"#34d39966",tx:"#a7f3d0"},
+  {c:"#fbbf24",bg:"#fbbf2422",bd:"#fbbf2466",tx:"#fde68a"},
+  {c:"#f97316",bg:"#f9731622",bd:"#f9731666",tx:"#fed7aa"},
+  {c:"#f472b6",bg:"#f472b622",bd:"#f472b666",tx:"#fbcfe8"}
 ];
 
-/* ── State ── */
-let CATS = [];
-let expCat = null;
-let selFact = null;
-let query = '';
+var NS = "http://www.w3.org/2000/svg";
+var CATS = [], expCat = null, selFact = null, query = "";
 
-/* ── Layout constants (SVG viewBox 600×480) ── */
-const VW=600, VH=480, CX=295, CY=245, CAT_R=155, FACT_R=110;
+function el(tag, attrs) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
 
-function catAngle(i){ return (i*60-90)*Math.PI/180; }
-function catPos(i){ const a=catAngle(i); return {x:CX+CAT_R*Math.cos(a), y:CY+CAT_R*Math.sin(a), a}; }
-function factPositions(catIdx, count){
-  const cp=catPos(catIdx), a=cp.a;
-  const spread=Math.min(Math.PI*0.8,(count-1)*0.26+0.1);
-  return Array.from({length:count},(_,i)=>{
-    const ang=count===1?a:a-spread/2+i*spread/(count-1);
-    return {x:cp.x+FACT_R*Math.cos(ang), y:cp.y+FACT_R*Math.sin(ang)};
+function filtered(cat) {
+  if (!query) return cat.facts;
+  var q = query.toLowerCase();
+  return cat.facts.filter(function(f) {
+    return f.label.toLowerCase().indexOf(q) >= 0 || f.full.toLowerCase().indexOf(q) >= 0;
   });
 }
-const pct=(v,tot)=>(v/tot*100).toFixed(2)+'%';
 
-/* ── Data loading ── */
-async function loadData(){
-  const tag=document.getElementById('sourceTag');
+function isMob() { return window.innerWidth <= 640; }
 
-  if(CONFIG.gistUrl){
-    try{
-      const r=await fetch(CONFIG.gistUrl+'?t='+Date.now());
-      if(r.ok){
-        const d=await r.json();
-        tag.className='tb-source gist';
-        tag.innerHTML='<i class="ti ti-brand-github" aria-hidden="true"></i> Gist (live)';
-        return d;
-      }
-    }catch(e){}
+function getLayout() {
+  if (isMob()) {
+    return { vb:"0 0 380 520", cx:190, cy:262, cr:118, fr:82, cnr:30, catr:22, catrA:27, fs:8, catfs:11, lblfs:7 };
   }
+  return { vb:"0 0 600 460", cx:295, cy:238, cr:150, fr:106, cnr:36, catr:26, catrA:32, fs:9, catfs:14, lblfs:8 };
+}
 
-  try{
-    const r=await fetch(CONFIG.repoFallback+'?t='+Date.now());
-    if(r.ok){
-      const d=await r.json();
-      tag.className='tb-source repo';
-      tag.innerHTML='<i class="ti ti-file-code" aria-hidden="true"></i> Repo backup';
-      return d;
+function drawTree() {
+  var svg = document.getElementById("tree");
+  svg.innerHTML = "";
+  var L = getLayout();
+  svg.setAttribute("viewBox", L.vb);
+
+  document.getElementById("stTotal").textContent = CATS.reduce(function(a,c){return a+c.facts.length;},0);
+
+  var lg = el("g"); svg.appendChild(lg); // lines
+  var ng = el("g"); svg.appendChild(ng); // nodes
+
+  // center node
+  var cg = el("g");
+  cg.appendChild(el("circle",{cx:L.cx,cy:L.cy,r:L.cnr,fill:"#3b0764",stroke:"#a78bfa",["stroke-width"]:"1.5","stroke-opacity":"0.7"}));
+  var cemoji = el("text",{x:L.cx,y:L.cy-4,"text-anchor":"middle","dominant-baseline":"middle","font-size":L.catfs+8});
+  cemoji.textContent = String.fromCodePoint(0x1F9E0);
+  cg.appendChild(cemoji);
+  var ctxt = el("text",{x:L.cx,y:L.cy+L.cnr-8,"text-anchor":"middle","font-size":L.lblfs,"font-weight":"600",fill:"#ddd6fe","font-family":"Space Grotesk,sans-serif"});
+  ctxt.textContent = "Samyak";
+  cg.appendChild(ctxt);
+  ng.appendChild(cg);
+
+  CATS.forEach(function(cat, i) {
+    var a = (i*60 - 90) * Math.PI / 180;
+    var cx = L.cx + L.cr * Math.cos(a);
+    var cy = L.cy + L.cr * Math.sin(a);
+    var pl = PAL[cat.ci] || PAL[0];
+    var isE = expCat === cat.id;
+    var r = isE ? L.catrA : L.catr;
+
+    // line center->cat
+    var line = el("line",{x1:L.cx,y1:L.cy,x2:cx,y2:cy,stroke:pl.c,"stroke-opacity":isE?"0.7":"0.2","stroke-width":isE?"1.5":"0.7"});
+    if (!isE) line.setAttribute("stroke-dasharray","3 6");
+    lg.appendChild(line);
+
+    // category group
+    var g = el("g",{cursor:"pointer"});
+    g.appendChild(el("circle",{cx:cx,cy:cy,r:r,fill:isE?pl.bg:"rgba(20,20,40,0.8)",stroke:pl.c,"stroke-width":"1.5","stroke-opacity":isE?"1":"0.45"}));
+    var eIcon = el("text",{x:cx,y:cy-2,"text-anchor":"middle","dominant-baseline":"middle","font-size":L.catfs});
+    eIcon.textContent = cat.emoji;
+    g.appendChild(eIcon);
+    var lbl = el("text",{x:cx,y:cy+r+10,"text-anchor":"middle","font-size":L.lblfs,"fill":isE?pl.tx:"#64748b","font-family":"Space Grotesk,sans-serif","font-weight":isE?"600":"400"});
+    lbl.textContent = cat.label;
+    g.appendChild(lbl);
+
+    g.addEventListener("click", function() {
+      expCat = isE ? null : cat.id;
+      selFact = null;
+      drawTree();
+      if (isMob()) { isE ? closeDrawer() : openDrawer(cat, pl); }
+      else renderDesktopPanel();
+    });
+    ng.appendChild(g);
+
+    // fact nodes when expanded
+    if (isE) {
+      var facts = filtered(cat).slice(0, 8);
+      var count = facts.length;
+      var spread = Math.min(Math.PI * 0.8, (count-1) * 0.26 + 0.1);
+      facts.forEach(function(fact, fi) {
+        var fa = count === 1 ? a : a - spread/2 + fi * spread / (count-1);
+        var fx = cx + L.fr * Math.cos(fa);
+        var fy = cy + L.fr * Math.sin(fa);
+        var isSel = selFact && selFact.id === fact.id;
+
+        var fl = el("line",{x1:cx,y1:cy,x2:fx,y2:fy,stroke:pl.c,"stroke-opacity":isSel?"0.85":"0.35","stroke-width":isSel?"1.5":"0.7"});
+        lg.appendChild(fl);
+
+        var fg = el("g",{cursor:"pointer"});
+        var shortLbl = fact.label.length > 14 ? fact.label.substring(0,13)+"…" : fact.label;
+        var tw = shortLbl.length * (L.fs * 0.55) + 10;
+        fg.appendChild(el("rect",{x:fx-tw/2,y:fy-8,width:tw,height:16,rx:8,fill:isSel?pl.bg:"rgba(15,15,30,0.9)",stroke:pl.c,"stroke-width":"0.8","stroke-opacity":isSel?"0.9":"0.4"}));
+        var ft = el("text",{x:fx,y:fy+1,"text-anchor":"middle","dominant-baseline":"middle","font-size":L.fs,fill:isSel?pl.tx:"#94a3b8","font-family":"Space Grotesk,sans-serif","font-weight":isSel?"600":"400"});
+        ft.textContent = shortLbl;
+        fg.appendChild(ft);
+
+        fg.addEventListener("click", function(e) {
+          e.stopPropagation();
+          selFact = isSel ? null : fact;
+          drawTree();
+          if (isMob()) openDrawer(cat, pl); else renderDesktopPanel();
+        });
+        ng.appendChild(fg);
+      });
     }
-  }catch(e){}
-
-  tag.className='tb-source default';
-  tag.innerHTML='<i class="ti ti-alert-triangle" aria-hidden="true"></i> Gist URL not set';
-  return null;
-}
-
-/* ── Render ── */
-function filteredFacts(cat){
-  if(!query) return cat.facts;
-  const q=query.toLowerCase();
-  return cat.facts.filter(f=>f.label.toLowerCase().includes(q)||f.full.toLowerCase().includes(q));
-}
-
-function render(){
-  const svg=document.getElementById('svgLines');
-  const nl=document.getElementById('nodeLayer');
-  svg.innerHTML=''; nl.innerHTML='';
-
-  const total=CATS.reduce((a,c)=>a+c.facts.length,0);
-  document.getElementById('statTotal').textContent=total;
-
-  /* center→cat lines */
-  CATS.forEach((cat,i)=>{
-    const cp=catPos(i), p=PALETTE[cat.colorIndex]||PALETTE[0];
-    const isE=expCat===cat.id;
-    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1',CX); line.setAttribute('y1',CY);
-    line.setAttribute('x2',cp.x); line.setAttribute('y2',cp.y);
-    line.setAttribute('stroke',p.c);
-    line.setAttribute('stroke-opacity',isE?'0.7':'0.2');
-    line.setAttribute('stroke-width',isE?'1.5':'0.7');
-    if(!isE) line.setAttribute('stroke-dasharray','3 6');
-    svg.appendChild(line);
   });
-
-  /* cat→fact lines */
-  if(expCat){
-    const ci=CATS.findIndex(c=>c.id===expCat);
-    const cat=CATS[ci], cp=catPos(ci), p=PALETTE[cat.colorIndex]||PALETTE[0];
-    const facts=filteredFacts(cat).slice(0,8);
-    const fps=factPositions(ci,facts.length);
-    fps.forEach((fp,fi)=>{
-      const isSel=selFact&&selFact.id===facts[fi].id;
-      const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-      line.setAttribute('x1',cp.x); line.setAttribute('y1',cp.y);
-      line.setAttribute('x2',fp.x); line.setAttribute('y2',fp.y);
-      line.setAttribute('stroke',p.c);
-      line.setAttribute('stroke-opacity',isSel?'0.85':'0.35');
-      line.setAttribute('stroke-width',isSel?'1.5':'0.7');
-      svg.appendChild(line);
-    });
-  }
-
-  /* center node */
-  const cn=document.createElement('div');
-  cn.className='center-node';
-  cn.style.left=pct(CX,VW); cn.style.top=pct(CY,VH);
-  cn.innerHTML=`<i class="ti ti-brain" aria-hidden="true"></i><div class="cn-lbl">Samyak's brain</div>`;
-  nl.appendChild(cn);
-
-  /* category nodes */
-  CATS.forEach((cat,i)=>{
-    const cp=catPos(i), p=PALETTE[cat.colorIndex]||PALETTE[0];
-    const isE=expCat===cat.id;
-    const hasFacts=filteredFacts(cat).length>0;
-    const dim=query&&!hasFacts;
-    const div=document.createElement('div');
-    div.className='cat-node'+(isE?' active':'');
-    div.style.left=pct(cp.x,VW); div.style.top=pct(cp.y,VH);
-    div.style.background=isE?p.bg:'rgba(255,255,255,0.03)';
-    div.style.borderColor=isE?p.c:(dim?'#1e1e30':p.border);
-    div.style.opacity=dim?'0.25':'1';
-    div.style.pointerEvents='all';
-    div.innerHTML=`<i class="ti ${cat.icon}" aria-hidden="true" style="color:${isE?p.c:'#475569'}"></i><div class="cn-lbl" style="color:${isE?p.text:'#475569'}">${cat.label}</div>`;
-    div.addEventListener('click',()=>{ expCat=isE?null:cat.id; selFact=null; render(); renderPanel(); });
-    nl.appendChild(div);
-  });
-
-  /* fact chips */
-  if(expCat){
-    const ci=CATS.findIndex(c=>c.id===expCat);
-    const cat=CATS[ci], p=PALETTE[cat.colorIndex]||PALETTE[0];
-    const facts=filteredFacts(cat).slice(0,8);
-    const fps=factPositions(ci,facts.length);
-    facts.forEach((fact,fi)=>{
-      const fp=fps[fi], isSel=selFact&&selFact.id===fact.id;
-      const chip=document.createElement('div');
-      chip.className='fact-chip'+(isSel?' sel':'');
-      chip.style.left=pct(fp.x,VW); chip.style.top=pct(fp.y,VH);
-      chip.style.background=isSel?p.bg:'rgba(255,255,255,0.04)';
-      chip.style.borderColor=isSel?p.c:p.border;
-      chip.style.color=isSel?p.text:'#64748b';
-      chip.style.pointerEvents='all';
-      chip.textContent=fact.label; chip.title=fact.full;
-      chip.addEventListener('click',e=>{ e.stopPropagation(); selFact=isSel?null:fact; render(); renderPanel(); });
-      nl.appendChild(chip);
-    });
-  }
 }
 
-function renderPanel(){
-  const pb=document.getElementById('panelBody');
-  const ptitle=document.getElementById('ptitle');
-  const psub=document.getElementById('psub');
-
-  if(!expCat){
-    ptitle.innerHTML=`<i class="ti ti-brain" aria-hidden="true" style="color:#a78bfa"></i> Memory Fetch`;
-    psub.textContent='Click a node to inspect';
-    pb.innerHTML='<div class="empty"><i class="ti ti-brain" aria-hidden="true"></i><p>Click any category<br>to explore memories</p></div>';
-    return;
+function buildHTML(cat, pl) {
+  if (selFact) {
+    var rels = cat.facts.filter(function(f){return f.id!==selFact.id;}).slice(0,5).map(function(f){
+      return "<div class=\"ri\" data-fid=\""+f.id+"\">"+f.label+"</div>";
+    }).join("");
+    return "<div class=\"fdet\" style=\"background:"+pl.bg+";border-color:"+pl.bd+"\"><div class=\"fcl\" style=\"color:"+pl.c+"\">"+cat.label+"</div><div class=\"ftxt\">"+selFact.full+"</div></div><button class=\"cpbtn\" id=\"cpb\">Copy memory</button><div class=\"sh\">Also in category</div>"+rels;
   }
+  var facts = filtered(cat);
+  if (facts.length === 0) return "<div class=\"emp\"><p style=\"font-size:11px;color:#475569\">No matches found</p></div>";
+  return facts.map(function(f){return "<div class=\"li\" data-fid=\""+f.id+"\"><div class=\"lt\">"+f.label+"</div><div class=\"ls\">"+f.full+"</div></div>";}).join("");
+}
 
-  const ci=CATS.findIndex(c=>c.id===expCat);
-  const cat=CATS[ci], p=PALETTE[cat.colorIndex]||PALETTE[0];
-  const facts=filteredFacts(cat);
+function bindEvents(container, cat, pl) {
+  var cp = container.querySelector("#cpb");
+  if (cp) cp.onclick = function(){navigator.clipboard && navigator.clipboard.writeText(selFact.full).catch(function(){});};
+  container.querySelectorAll(".ri").forEach(function(e){
+    e.addEventListener("click",function(){selFact=cat.facts.find(function(f){return f.id===e.dataset.fid;});drawTree();if(isMob())openDrawer(cat,pl);else renderDesktopPanel();});
+  });
+  container.querySelectorAll(".li").forEach(function(e){
+    e.addEventListener("click",function(){selFact=cat.facts.find(function(f){return f.id===e.dataset.fid;});drawTree();if(isMob())openDrawer(cat,pl);else renderDesktopPanel();});
+  });
+}
 
-  ptitle.innerHTML=`<i class="ti ${cat.icon}" aria-hidden="true" style="color:${p.c}"></i> ${cat.label}`;
-  psub.textContent=`${facts.length} ${facts.length===1?'memory':'memories'}`;
-
-  if(selFact){
-    pb.innerHTML=`
-      <div class="fact-detail" style="background:${p.bg};border-color:${p.border}">
-        <div class="fcat-label" style="color:${p.c}">${cat.label}</div>
-        <div class="ftext">${selFact.full}</div>
-      </div>
-      <button class="copy-btn" id="copyBtn"><i class="ti ti-copy" aria-hidden="true"></i> Copy memory</button>
-      <div class="sec-head">Also in category</div>
-      ${cat.facts.filter(f=>f.id!==selFact.id).slice(0,5).map(f=>`
-        <div class="rel-item" data-fid="${f.id}">${f.label}</div>
-      `).join('')}
-    `;
-    document.getElementById('copyBtn').onclick=()=>navigator.clipboard?.writeText(selFact.full).catch(()=>{});
-    pb.querySelectorAll('.rel-item').forEach(el=>{
-      el.addEventListener('click',()=>{ selFact=cat.facts.find(f=>f.id===el.dataset.fid); render(); renderPanel(); });
-    });
-  } else {
-    pb.innerHTML=facts.map(f=>`
-      <div class="list-item" data-fid="${f.id}">
-        <div class="li-title">${f.label}</div>
-        <div class="li-sub">${f.full}</div>
-      </div>
-    `).join('')+(cat.facts.length>8&&!query?`<div style="font-size:9px;color:#334155;text-align:center;padding:6px">+${cat.facts.length-8} more shown on canvas</div>`:'');
-    pb.querySelectorAll('.list-item').forEach(el=>{
-      el.addEventListener('click',()=>{ selFact=cat.facts.find(f=>f.id===el.datase
+function renderDesktopPanel() {
+  var pt=document.getElementById("dpt"), ps=document.getElementById("dps"), pb=document.getElementById("dpb");
+  if (!expCat) {
+    pt.textContent="Memory Fetch"; ps.textContent="Click a node";
+    pb.innerHTML="<div class=\"emp\"><p style=\"font-size:28px;margin-bottom:8px\">&#129504;</p><p style=\"font-size:11px;line-height:1.8\">Click any category<br>to
