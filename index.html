@@ -4,624 +4,608 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>Memory Tree 3D</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:#07070f;color:#e2e8f0;font-family:"Space Grotesk",system-ui,sans-serif;overflow:hidden}
 .app{display:flex;flex-direction:column;height:100vh}
-.topbar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:#0d0d1aee;border-bottom:1px solid #1e1e30;flex-shrink:0;flex-wrap:wrap;z-index:50;position:relative}
-.logo{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#a78bfa}
-.badge{font-size:10px;color:#34d399;background:#34d39912;border:1px solid #34d39930;border-radius:20px;padding:2px 8px}
-.date{font-size:10px;color:#475569;margin-left:auto;white-space:nowrap}
-.srch{padding:5px 11px;border-radius:20px;background:#111122;border:1px solid #1e1e30;color:#e2e8f0;font-size:11px;font-family:inherit;outline:none;width:120px}
-.srch::placeholder{color:#334155}
-.clr{background:none;border:none;color:#475569;cursor:pointer;font-size:12px}
-.synbtn{padding:5px 10px;border-radius:20px;background:#1e1e30;border:1px solid #2d2d4a;color:#a78bfa;font-size:10px;cursor:pointer;font-family:inherit}
-.main{display:flex;flex:1;overflow:hidden;position:relative}
+.topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#07070fdd;border-bottom:1px solid #1a1a2e;flex-shrink:0;flex-wrap:wrap;backdrop-filter:blur(10px);position:relative;z-index:50}
+.logo{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#a78bfa;letter-spacing:.3px}
+.badge{font-size:9px;color:#34d399;background:#34d39910;border:1px solid #34d39928;border-radius:20px;padding:2px 8px;letter-spacing:.5px}
+.date{font-size:10px;color:#334155;margin-left:auto}
+.srch{padding:5px 11px;border-radius:20px;background:#0f0f1f;border:1px solid #1a1a2e;color:#e2e8f0;font-size:11px;font-family:inherit;outline:none;width:120px;transition:border-color .2s}
+.srch:focus{border-color:#a78bfa55}
+.srch::placeholder{color:#2d2d4a}
+.clr{background:none;border:none;color:#334155;cursor:pointer;font-size:12px}
+.synbtn{padding:4px 10px;border-radius:20px;background:transparent;border:1px solid #1a1a2e;color:#64748b;font-size:10px;cursor:pointer;font-family:inherit}
+.synbtn:hover{border-color:#a78bfa44;color:#a78bfa}
 #wrap{flex:1;position:relative;overflow:hidden}
 #c{display:block;width:100%;height:100%}
 #labels{position:absolute;inset:0;pointer-events:none;z-index:10}
-.nlbl{position:absolute;pointer-events:none;transform:translate(-50%,-120%);white-space:nowrap;text-align:center;transition:opacity .2s}
-.nlbl .ntxt{font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;border:1px solid;background:#07070f99}
-.nlbl .nsub{font-size:7.5px;color:#64748b;margin-top:1px}
-.flbl{position:absolute;pointer-events:none;transform:translate(-50%,-130%);display:none;white-space:nowrap}
-.flbl span{font-size:9px;font-weight:500;padding:2px 7px;border-radius:8px;background:#0d0d1a;border:1px solid #2d2d4a;color:#e2e8f0}
-.hint{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);font-size:10px;color:#334155;white-space:nowrap;pointer-events:none;z-index:10;transition:opacity .5s}
-.statsbar{position:absolute;bottom:0;left:0;right:0;display:flex;gap:12px;padding:6px 14px;background:#0d0d1acc;border-top:1px solid #1e1e30;font-size:10px;color:#475569;flex-wrap:wrap;z-index:20}
-.statsbar b{color:#94a3b8;font-weight:500}
-.panel{width:270px;border-left:1px solid #1e1e30;display:flex;flex-direction:column;overflow:hidden;background:#0a0a16;z-index:20}
-.ph{padding:11px 13px 8px;border-bottom:1px solid #1e1e30;flex-shrink:0}
-.pt{font-size:11px;font-weight:600;color:#e2e8f0}
-.ps{font-size:10px;color:#475569;margin-top:2px}
-.pb{flex:1;overflow-y:auto;padding:9px}
-.pb::-webkit-scrollbar{width:3px}
-.pb::-webkit-scrollbar-thumb{background:#1e1e30;border-radius:2px}
-.drawer{position:fixed;left:0;right:0;bottom:0;z-index:100;background:#0d0d1a;border-top:1px solid #2d2d4a;border-radius:16px 16px 0 0;max-height:65vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .28s ease}
-.drawer.open{transform:translateY(0)}
-.dhandle{width:32px;height:3px;background:#2d2d4a;border-radius:2px;margin:9px auto 0}
-.dhead{padding:9px 14px 8px;border-bottom:1px solid #1e1e30;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
-.dtitle{font-size:12px;font-weight:600;color:#e2e8f0}
-.dclose{background:none;border:none;color:#475569;cursor:pointer;font-size:15px;padding:2px 6px}
-.dbody{overflow-y:auto;padding:10px;-webkit-overflow-scrolling:touch}
-.fdet{padding:10px 12px;border-radius:8px;border:1px solid;margin-bottom:9px}
-.fcl{font-size:9px;font-weight:600;letter-spacing:.6px;margin-bottom:5px;text-transform:uppercase}
-.ftxt{font-size:12px;color:#e2e8f0;line-height:1.65}
-.cpbtn{width:100%;padding:7px;border-radius:8px;background:#111122;border:1px solid #1e1e30;color:#64748b;cursor:pointer;font-size:10px;font-family:inherit;margin-bottom:10px}
-.sh{font-size:9px;color:#334155;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px}
-.ri{padding:6px 10px;border-radius:8px;border:1px solid #1e1e3044;margin-bottom:4px;cursor:pointer;font-size:10px;color:#64748b;background:#111122}
-.li{padding:8px 10px;border-radius:8px;border:1px solid #1e1e30;margin-bottom:6px;cursor:pointer;background:#111122}
-.lt{font-size:11px;color:#e2e8f0;font-weight:500}
-.ls{font-size:9px;color:#475569;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.emp{text-align:center;padding:32px 16px;color:#334155}
-.conn-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:10px;font-size:9px;margin:2px;border:1px solid;cursor:pointer}
-.modal-bg{position:fixed;inset:0;background:#000b;z-index:200;display:flex;align-items:flex-end;justify-content:center}
-.modal{background:#0d0d1a;border:1px solid #2d2d4a;border-radius:16px 16px 0 0;padding:20px 20px 28px;width:100%;max-width:480px}
-.modal h3{font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:8px}
-.modal p{font-size:11px;color:#64748b;line-height:1.7;margin-bottom:10px}
-.ms{display:flex;gap:10px;margin-bottom:9px}
-.mn{width:20px;height:20px;border-radius:50%;background:#a78bfa20;border:1px solid #a78bfa44;color:#a78bfa;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.mt{font-size:11px;color:#94a3b8;line-height:1.6}
-.mt code{font-family:monospace;font-size:10px;background:#111122;border:1px solid #1e1e30;border-radius:4px;padding:1px 5px;color:#a78bfa}
-.mcl{width:100%;padding:9px;border-radius:8px;background:#a78bfa20;border:1px solid #a78bfa44;color:#a78bfa;cursor:pointer;font-size:12px;font-family:inherit;margin-top:6px}
-@media(max-width:640px){.panel{display:none}}
-@media(min-width:641px){.drawer{display:none!important}}
+.nlbl{position:absolute;pointer-events:none;transform:translate(-50%,-140%)}
+.nlbl .ntxt{font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;border:1px solid;background:rgba(7,7,15,.9);white-space:nowrap;letter-spacing:.3px}
+.nlbl .nsub{font-size:7px;color:#334155;text-align:center;margin-top:2px;font-family:"Space Mono",monospace}
+.flbl{position:absolute;pointer-events:none;transform:translate(-50%,-150%);display:none}
+.flbl span{font-size:8.5px;font-weight:500;padding:2px 6px;border-radius:6px;background:#0a0a18;border:1px solid #1a1a2e;color:#94a3b8;white-space:nowrap}
+
+/* ── FLOATING HUD CARD ── */
+#hud{position:absolute;z-index:60;width:240px;pointer-events:all;display:none;filter:drop-shadow(0 8px 32px rgba(0,0,0,.7))}
+#hud.show{display:block;animation:hudIn .2s ease-out}
+@keyframes hudIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.hud-inner{background:rgba(8,9,22,.92);backdrop-filter:blur(18px);border:1px solid #1e1e35;border-radius:14px;overflow:hidden;position:relative}
+.hud-accent{height:2px;background:linear-gradient(to right,var(--ac),transparent)}
+.hud-head{display:flex;align-items:center;justify-content:space-between;padding:9px 12px 7px}
+.hud-cat{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--ac)}
+.hud-x{background:none;border:none;color:#334155;cursor:pointer;font-size:14px;line-height:1;padding:0 2px;transition:color .15s}
+.hud-x:hover{color:#94a3b8}
+.hud-name{font-size:13px;font-weight:600;color:#e2e8f0;padding:0 12px 8px;line-height:1.4}
+.hud-full{font-size:10.5px;color:#94a3b8;line-height:1.6;padding:0 12px 10px;border-bottom:1px solid #1a1a2e}
+.hud-row{padding:8px 12px;display:flex;flex-wrap:wrap;gap:4px}
+.hud-row-lbl{font-size:8px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#2d2d4a;padding:6px 12px 2px;width:100%}
+.hud-pill{font-size:9px;padding:2px 8px;border-radius:10px;border:1px solid;cursor:pointer;transition:opacity .15s;background:transparent;font-family:inherit}
+.hud-pill:hover{opacity:.75}
+.hud-actions{display:flex;gap:6px;padding:8px 12px 10px}
+.hud-copy{flex:1;padding:5px;border-radius:8px;background:#0f0f1f;border:1px solid #1a1a2e;color:#64748b;cursor:pointer;font-size:10px;font-family:inherit;transition:all .15s}
+.hud-copy:hover{border-color:var(--ac);color:var(--ac)}
+.hud-arrow{position:absolute;width:8px;height:8px;background:rgba(8,9,22,.92);border:1px solid #1e1e35;transform:rotate(45deg)}
+
+/* Category HUD */
+.hud-grid{display:flex;flex-wrap:wrap;gap:4px;padding:6px 12px 10px}
+.hud-fact-btn{font-size:9px;padding:3px 8px;border-radius:8px;border:1px solid;cursor:pointer;transition:all .15s;background:transparent;font-family:inherit;text-align:left}
+.hud-fact-btn:hover{opacity:.75}
+
+/* Connector SVG */
+#conn-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:55}
+
+/* hint */
+.hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:9.5px;color:#1e1e35;white-space:nowrap;pointer-events:none;z-index:10;transition:opacity 1s;letter-spacing:.3px}
+
+/* search highlight pulse */
+@keyframes searchPop{0%,100%{opacity:.3}50%{opacity:1}}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="topbar">
-  <div class="logo">&#129504; Memory Tree 3D</div>
-  <div class="badge">&#10003; 3D</div>
-  <span class="date" id="sd">-</span>
-  <input class="srch" id="srch" type="text" placeholder="search..." oninput="onSearch(this.value)">
+  <div class="logo">&#129504; Memory Tree</div>
+  <div class="badge">3D</div>
+  <span class="date" id="sd"></span>
+  <input class="srch" id="srch" type="text" placeholder="search memories..." oninput="onSearch(this.value)">
   <button class="clr" id="clrBtn" style="display:none" onclick="clearSearch()">&#x2715;</button>
-  <button class="synbtn" onclick="showModal()">&#8635; Sync</button>
+  <button class="synbtn" onclick="showModal()">&#8635; sync</button>
 </div>
-<div class="main">
-  <div id="wrap">
-    <canvas id="c"></canvas>
-    <div id="labels">
-      <div class="flbl" id="factLabel"><span id="factLabelTxt"></span></div>
+<div id="wrap">
+  <canvas id="c"></canvas>
+
+  <!-- Label layer -->
+  <div id="labels">
+    <div class="flbl" id="factLabel"><span id="factLabelTxt"></span></div>
+  </div>
+
+  <!-- Connector line SVG -->
+  <svg id="conn-svg">
+    <defs>
+      <marker id="dot" markerWidth="4" markerHeight="4" refX="2" refY="2">
+        <circle cx="2" cy="2" r="1.5" fill="#a78bfa" opacity="0.6"/>
+      </marker>
+    </defs>
+    <line id="connLine" x1="0" y1="0" x2="0" y2="0"
+      stroke="#a78bfa" stroke-width="1" stroke-opacity="0" stroke-dasharray="4 5"
+      marker-end="url(#dot)"/>
+  </svg>
+
+  <!-- Floating HUD Card -->
+  <div id="hud" style="--ac:#a78bfa">
+    <div class="hud-inner" id="hudInner">
+      <div class="hud-accent" id="hudAccent"></div>
+      <div class="hud-head">
+        <div class="hud-cat" id="hudCat"></div>
+        <button class="hud-x" onclick="hideHud()">&#x2715;</button>
+      </div>
+      <div id="hudBody"></div>
     </div>
-    <div class="hint" id="hint">Drag to rotate &nbsp;&#8226;&nbsp; Tap nodes to explore</div>
-    <div class="statsbar">
-      <span><b id="stTotal">0</b> memories</span>
-      <span><b style="color:#60a5fa">10</b> projects</span>
-      <span><b style="color:#34d399">7/15</b> days</span>
-      <span><b style="color:#f472b6">9</b> refs</span>
+  </div>
+
+  <div class="hint" id="hint">drag to rotate &nbsp;&bull;&nbsp; tap nodes to explore</div>
+</div>
+</div>
+
+<!-- Sync modal -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:#000a;z-index:200;display:none;align-items:center;justify-content:center">
+  <div style="background:#0a0a18;border:1px solid #1e1e35;border-radius:16px;padding:24px;width:360px;max-width:92vw">
+    <div style="font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:8px">&#8635; How to sync</div>
+    <p style="font-size:11px;color:#475569;line-height:1.7;margin-bottom:12px">When Claude learns something new, update in 3 steps:</p>
+    <div style="font-size:11px;color:#94a3b8;line-height:1.8">
+      1. In any Claude chat type <code style="font-family:monospace;background:#111;border:1px solid #1e1e35;border-radius:4px;padding:1px 5px;color:#a78bfa;font-size:10px">sync my memory tree</code><br>
+      2. Find <code style="font-family:monospace;background:#111;border:1px solid #1e1e35;border-radius:4px;padding:1px 5px;color:#a78bfa;font-size:10px">MEMORY_DATA</code> in index.html and replace<br>
+      3. Commit and push to GitHub
     </div>
-  </div>
-  <div class="panel">
-    <div class="ph"><div class="pt" id="dpt">Memory Tree 3D</div><div class="ps" id="dps">Drag to rotate &bull; tap nodes</div></div>
-    <div class="pb" id="dpb"><div class="emp"><p style="font-size:32px;margin-bottom:8px">&#129504;</p><p style="font-size:11px;line-height:1.8;color:#475569">All nodes visible in 3D space.<br>Drag to rotate the scene.<br>Tap any node to see details.</p></div></div>
+    <button onclick="hideModal()" style="margin-top:16px;width:100%;padding:8px;border-radius:8px;background:#a78bfa18;border:1px solid #a78bfa44;color:#a78bfa;cursor:pointer;font-size:12px;font-family:inherit">Got it</button>
   </div>
 </div>
-</div>
-<div class="drawer" id="drawer">
-  <div class="dhandle"></div>
-  <div class="dhead"><div class="dtitle" id="dtitle">Details</div><button class="dclose" onclick="closeDrawer()">&#x2715;</button></div>
-  <div class="dbody" id="dbody"></div>
-</div>
-<div class="modal-bg" id="modal" style="display:none" onclick="if(event.target===this)hideModal()">
-  <div class="modal">
-    <h3>How to sync</h3>
-    <p>When Claude learns something new, update in 3 steps:</p>
-    <div class="ms"><div class="mn">1</div><div class="mt">In any chat type <code>sync my memory tree</code></div></div>
-    <div class="ms"><div class="mn">2</div><div class="mt">Find <code>MEMORY_DATA</code> in index.html and replace</div></div>
-    <div class="ms"><div class="mn">3</div><div class="mt">Commit and push to GitHub</div></div>
-    <button class="mcl" onclick="hideModal()">Got it</button>
-  </div>
-</div>
+
 <script>
-/* ── DATA ── */
+/* ══════════════════════════════════════
+   DATA
+══════════════════════════════════════ */
 var MEMORY_DATA={lastSynced:"2026-07-14",categories:[
 {id:"identity",label:"Identity",emoji:"\u{1F464}",ci:0,facts:[
 {id:"i1",label:"Samyak Bhadke",full:"Full name: Samyak Bhadke"},
 {id:"i2",label:"Nagpur, India",full:"Location: Nagpur, Maharashtra, India"},
 {id:"i3",label:"SB Jain Institute",full:"College: SB Jain Institute of Technology, Management & Research"},
-{id:"i4",label:"CSE 1st yr",full:"First-year Computer Science Engineering. USN: CS25041"}
-]},
+{id:"i4",label:"CSE 1st yr",full:"First-year CSE student. USN: CS25041"}]},
 {id:"projects",label:"Projects",emoji:"\u{1F680}",ci:1,facts:[
 {id:"p1",label:"Halcyon AI",full:"Halcyon: Hinglish AI assistant Android app (Java, Pollinations.ai + Groq + Gemini)"},
 {id:"p2",label:"TaskBell v6",full:"TaskBell v6: Android reminder app (Room DB, AlarmManager, live/video bg theme)"},
 {id:"p3",label:"ORBIT DOCK",full:"ORBIT DOCK: Electron + React desktop hub with WebViews + ADB/scrcpy, NSIS installer"},
 {id:"p4",label:"PDF Vault v4",full:"PDF Vault v4: Android PDF manager with AI chat, PdfBox full-text indexing"},
 {id:"p5",label:"Vibewall",full:"Vibewall: Android AI wallpaper generator via Pollinations.ai, Room DB favorites"},
-{id:"p6",label:"Portfolio",full:"Portfolio: samyakb32-sys.github.io/My-Portfolio, single HTML, base64 assets, 3D sphere"},
-{id:"p7",label:"Shoply",full:"Shoply: Supabase marketplace at shoply-phi-ecru.vercel.app"},
+{id:"p6",label:"Portfolio",full:"Portfolio: samyakb32-sys.github.io/My-Portfolio — single HTML, base64 assets, 3D sphere"},
+{id:"p7",label:"Shoply",full:"Shoply: Supabase marketplace at shoply-phi-ecru.vercel.app (multi-seller + admin)"},
 {id:"p8",label:"SyllaSync",full:"SyllaSync v3.1: student PWA with AI study planner, PYQ explainer, bunk calculator"},
-{id:"p9",label:"TemplateForge",full:"TemplateForge: Canva-like template customization tool with AI suggestions"},
-{id:"p10",label:"Freelancer",full:"Freelancing on Freelancer.in as @SamyakPathan, no-interview preferred"}
-]},
+{id:"p9",label:"TemplateForge",full:"TemplateForge: Canva-like template customization tool with AI suggestions + code export"},
+{id:"p10",label:"Freelancer",full:"Freelancing on Freelancer.in as @SamyakPathan — no-interview preferred"}]},
 {id:"challenge",label:"Challenge",emoji:"\u{1F3C6}",ci:2,facts:[
 {id:"c1",label:"Day 1 Ambient",full:"Day 1 complete: Mood-Based Ambient Room"},
 {id:"c2",label:"Day 2 Code Roast",full:"Day 2 complete: Code Roast Arena"},
 {id:"c3",label:"Day 5 DevForge",full:"Day 5 complete: DevForge IDE"},
 {id:"c4",label:"Day 6 Song",full:"Day 6 complete: Song Meaning Time Capsule"},
-{id:"c5",label:"Day 7 NPC",full:"Day 7 complete: NPC or Main Character?"},
+{id:"c5",label:"Day 7 NPC",full:"Day 7 complete: NPC or Main Character? (RPG evaluator)"},
 {id:"c6",label:"Day 8 HabitLoop",full:"Day 8 complete: HabitLoop offline habit tracker PWA"},
 {id:"c7",label:"Day 9 JD Scan",full:"Day 9 complete: JD Bias Scanner"},
-{id:"c8",label:"7/15 done",full:"15-Day Build Challenge: 7 of 15 complete. All single-file HTML/CSS/JS + Pollinations.ai"}
-]},
+{id:"c8",label:"7/15 done",full:"15-Day Build Challenge: 7 of 15 complete — single-file HTML/CSS/JS + Pollinations.ai"}]},
 {id:"stack",label:"Stack",emoji:"\u2699\uFE0F",ci:3,facts:[
 {id:"s1",label:"Android+Java",full:"Android in Java: main mobile stack (Room DB, AlarmManager, RecyclerView)"},
 {id:"s2",label:"HTML/CSS/JS",full:"Vanilla HTML/CSS/JS: default for single-file projects and 15-Day Challenge"},
 {id:"s3",label:"React+Electron",full:"React + Electron: used for ORBIT DOCK desktop hub"},
-{id:"s4",label:"Pollinations.ai",full:"Pollinations.ai: free keyless AI backend (text + image). Core of all challenge projects"},
+{id:"s4",label:"Pollinations.ai",full:"Pollinations.ai: free keyless AI backend (text + image) — core of all challenge projects"},
 {id:"s5",label:"Groq+Gemini",full:"Groq (llama-3.3-70b) + Gemini API: AI fallbacks alongside Pollinations"},
-{id:"s6",label:"GitHub Pages",full:"GitHub Pages: main deploy. samyakb32-sys (Android), samyakbcse25 (web)"},
+{id:"s6",label:"GitHub Pages",full:"GitHub Pages: main deploy — samyakb32-sys (Android), samyakbcse25 (web/college)"},
 {id:"s7",label:"Vercel+Supabase",full:"Vercel + Supabase: used for Shoply marketplace"},
-{id:"s8",label:"Three.js+GSAP",full:"Three.js + GSAP: 3D scenes and scroll animations"}
-]},
+{id:"s8",label:"Three.js+GSAP",full:"Three.js + GSAP: 3D scenes and scroll animations"}]},
 {id:"prefs",label:"Prefs",emoji:"\u{1F3AF}",ci:4,facts:[
-{id:"pr1",label:"Hinglish",full:"Communicates in Hinglish. Claude always responds in Hinglish"},
-{id:"pr2",label:"Phone-first",full:"Phone-first workflow; GitHub Actions for cloud APK builds"},
+{id:"pr1",label:"Hinglish",full:"Communicates in Hinglish (Hindi-English mix). Claude always responds in Hinglish"},
+{id:"pr2",label:"Phone-first",full:"Phone-first workflow; GitHub Actions for cloud APK builds when laptop unavailable"},
 {id:"pr3",label:"Anime+One Piece",full:"Interests: anime, streetwear aesthetics, One Piece"},
-{id:"pr4",label:"Free APIs",full:"Prefers free/keyless AI APIs. Pollinations.ai is the cornerstone"},
-{id:"pr5",label:"Neutral UI",full:"Standard/neutral styling by default, NOT dark/neon unless asked"},
-{id:"pr6",label:"Freelancer.in",full:"Prefers no-interview freelance on Freelancer.in over Internshala"}
-]},
+{id:"pr4",label:"Free APIs",full:"Prefers free/keyless AI APIs — Pollinations.ai is the cornerstone"},
+{id:"pr5",label:"Neutral UI",full:"Standard/neutral styling by default — NOT dark/neon unless specifically asked"},
+{id:"pr6",label:"Freelancer.in",full:"Prefers no-interview freelance on Freelancer.in over Internshala"}]},
 {id:"design",label:"Design",emoji:"\u{1F3A8}",ci:5,facts:[
 {id:"d1",label:"animmasterlib",full:"animmasterlib.dev: animation library for page-load and scroll"},
 {id:"d2",label:"skiper-ui",full:"skiper-ui.com: modern UI component library"},
 {id:"d3",label:"vengenceui",full:"vengenceui.com: bold dark UI library"},
-{id:"d4",label:"motionsites.ai",full:"motionsites.ai: 7 signature motions: aurora, fluid, magnetic, noise field"},
+{id:"d4",label:"motionsites.ai",full:"motionsites.ai: 7 signature motions — aurora, fluid, magnetic, noise field"},
 {id:"d5",label:"getdesign.md",full:"getdesign.md: brand design systems and tokens (Vercel, Linear, Framer style)"},
 {id:"d6",label:"21st.dev",full:"21st.dev: featured React UI components"},
 {id:"d7",label:"dialedweb",full:"dialedweb.com: premium agency website reference"},
 {id:"d8",label:"rocket.new",full:"rocket.new/templates: landing page template references"},
-{id:"d9",label:"dotmatrix",full:"dotmatrix.zzzzshawn.cloud: dot matrix loader animations"}
-]}
+{id:"d9",label:"dotmatrix",full:"dotmatrix.zzzzshawn.cloud: dot matrix loader animations"}]}
 ]};
 
 var CROSS={
-  tech:[["p1","s4"],["p1","s5"],["p1","s1"],["p2","s1"],["p3","s3"],["p4","s1"],["p5","s1"],["p5","s4"],["p6","s8"],["p6","s6"],["p7","s7"],["p8","s4"],["p8","s6"],["p9","s2"]],
-  challenge:[["c1","s4"],["c2","s4"],["c3","s4"],["c4","s4"],["c5","s4"],["c6","s4"],["c7","s4"],["c8","s2"],["c8","s4"]],
+  tech:[["p1","s4"],["p1","s5"],["p1","s1"],["p2","s1"],["p3","s3"],
+        ["p4","s1"],["p5","s1"],["p5","s4"],["p6","s8"],["p6","s6"],
+        ["p7","s7"],["p8","s4"],["p8","s6"],["p9","s2"]],
+  challenge:[["c1","s4"],["c2","s4"],["c3","s4"],["c4","s4"],
+             ["c5","s4"],["c6","s4"],["c7","s4"],["c8","s2"],["c8","s4"]],
   design:[["d1","p6"],["d4","p6"],["d5","p9"],["d2","p9"],["d8","p9"]]
 };
-var CROSS_COL={tech:0x60a5fa,challenge:0x34d399,design:0xf472b6};
 var CROSS_HEX={tech:"#60a5fa",challenge:"#34d399",design:"#f472b6"};
+var CROSS_INT={tech:0x60a5fa,challenge:0x34d399,design:0xf472b6};
 
 var PAL=[
-  {c:"#a78bfa",hex:0xa78bfa},{c:"#60a5fa",hex:0x60a5fa},{c:"#34d399",hex:0x34d399},
-  {c:"#fbbf24",hex:0xfbbf24},{c:"#f97316",hex:0xf97316},{c:"#f472b6",hex:0xf472b6}
-];
-var PAL_FULL=[
-  {c:"#a78bfa",bg:"#a78bfa22",bd:"#a78bfa66",tx:"#ddd6fe"},
-  {c:"#60a5fa",bg:"#60a5fa22",bd:"#60a5fa66",tx:"#bfdbfe"},
-  {c:"#34d399",bg:"#34d39922",bd:"#34d39966",tx:"#a7f3d0"},
-  {c:"#fbbf24",bg:"#fbbf2422",bd:"#fbbf2466",tx:"#fde68a"},
-  {c:"#f97316",bg:"#f9731622",bd:"#f9731666",tx:"#fed7aa"},
-  {c:"#f472b6",bg:"#f472b622",bd:"#f472b666",tx:"#fbcfe8"}
+  {c:"#a78bfa",h:0xa78bfa},{c:"#60a5fa",h:0x60a5fa},{c:"#34d399",h:0x34d399},
+  {c:"#fbbf24",h:0xfbbf24},{c:"#f97316",h:0xf97316},{c:"#f472b6",h:0xf472b6}
 ];
 
-/* ── THREE.JS SETUP ── */
+/* ══════════════════════════════════════
+   THREE.JS SETUP
+══════════════════════════════════════ */
 var wrap=document.getElementById("wrap");
 var canvas=document.getElementById("c");
 var scene=new THREE.Scene();
 scene.background=new THREE.Color(0x07070f);
-
 var W=wrap.clientWidth,H=wrap.clientHeight;
 var camera=new THREE.PerspectiveCamera(55,W/H,0.1,5000);
 camera.position.set(0,0,520);
-camera.lookAt(0,0,0);
-
 var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.setSize(W,H);
 
-/* Background stars */
-var starPts=[];
-for(var si=0;si<400;si++){starPts.push((Math.random()-.5)*2000,(Math.random()-.5)*2000,(Math.random()-.5)*2000);}
-var starGeo=new THREE.BufferGeometry();
-starGeo.setAttribute("position",new THREE.Float32BufferAttribute(starPts,3));
-scene.add(new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xffffff,size:1.2,transparent:true,opacity:0.35})));
+/* Stars */
+(function(){
+  var pts=[];
+  for(var i=0;i<500;i++)pts.push((Math.random()-.5)*2400,(Math.random()-.5)*2400,(Math.random()-.5)*2400);
+  var g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(pts,3));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:1.3,transparent:true,opacity:0.3})));
+})();
 
-/* Ambient + point lights */
-scene.add(new THREE.AmbientLight(0xffffff,0.6));
-var pLight=new THREE.PointLight(0xa78bfa,1.5,600);
-pLight.position.set(50,100,200);
-scene.add(pLight);
-var pLight2=new THREE.PointLight(0x60a5fa,1,400);
-pLight2.position.set(-100,-80,100);
-scene.add(pLight2);
+/* Lights */
+scene.add(new THREE.AmbientLight(0xffffff,0.7));
+var pl1=new THREE.PointLight(0xa78bfa,1.8,700);pl1.position.set(60,120,200);scene.add(pl1);
+var pl2=new THREE.PointLight(0x60a5fa,1.0,500);pl2.position.set(-120,-80,150);scene.add(pl2);
 
-/* ── SCENE GRAPH ── */
-var pivot=new THREE.Group(); // everything rotates via this
+/* Pivot group — everything rotates here */
+var pivot=new THREE.Group();
 scene.add(pivot);
 
+/* ══════════════════════════════════════
+   BUILD 3D SCENE
+══════════════════════════════════════ */
 var clickable=[];
-var catMeshes={};
-var factMeshes={};
-var catPos3D={};
-var factPos3D={};
+var catMesh={},factMesh={},catPos3D={},factPos3D={};
 var crossLines=[];
 var catLabels=[];
 var CATS=MEMORY_DATA.categories;
 
-/* Helper: make line */
-function mkLine(pts,color,opacity){
-  var geo=new THREE.BufferGeometry().setFromPoints(pts);
-  var mat=new THREE.LineBasicMaterial({color:color,transparent:true,opacity:opacity});
-  return new THREE.Line(geo,mat);
+function mkLine(pts,col,op){
+  var g=new THREE.BufferGeometry().setFromPoints(pts);
+  var m=new THREE.LineBasicMaterial({color:col,transparent:true,opacity:op});
+  return new THREE.Line(g,m);
 }
-
-/* Helper: distribute N points on sphere surface */
 function fibSphere(n,r){
-  var pts=[];
-  var golden=Math.PI*(3-Math.sqrt(5));
+  var pts=[],phi=Math.PI*(3-Math.sqrt(5));
   for(var i=0;i<n;i++){
-    var y=1-(i/Math.max(n-1,1))*2;
-    var rad=Math.sqrt(Math.max(0,1-y*y));
-    var theta=golden*i;
-    pts.push(new THREE.Vector3(r*rad*Math.cos(theta),r*y,r*rad*Math.sin(theta)));
+    var y=1-(i/Math.max(n-1,1))*2,rad=Math.sqrt(Math.max(0,1-y*y)),t=phi*i;
+    pts.push(new THREE.Vector3(r*rad*Math.cos(t),r*y,r*rad*Math.sin(t)));
   }
   return pts;
 }
-
-/* Helper: hex string to label div */
-function mkLabel(id,txt,sub,col){
+function mkLbl(id,txt,sub,col){
   var d=document.createElement("div");
-  d.className="nlbl"; d.id="lbl_"+id;
-  d.innerHTML='<div class="ntxt" style="color:'+col+';border-color:'+col+'44;background:#07070fcc">'+txt+'</div>'+(sub?'<div class="nsub">'+sub+'</div>':'');
+  d.className="nlbl";d.id="lbl_"+id;
+  d.innerHTML='<div class="ntxt" style="color:'+col+';border-color:'+col+'33">'+txt+'</div>'+(sub?'<div class="nsub">'+sub+'</div>':'');
   document.getElementById("labels").appendChild(d);
   return d;
 }
-
-/* Helper: project 3D → 2D (accounts for pivot rotation) */
-function to2D(v3world){
-  var v=v3world.clone().project(camera);
-  return{
-    x:(v.x*.5+.5)*renderer.domElement.clientWidth,
-    y:(1-(v.y*.5+.5))*renderer.domElement.clientHeight,
-    behind:v.z>1
-  };
+function to2D(v){
+  var c=v.clone().project(camera);
+  return{x:(c.x*.5+.5)*renderer.domElement.clientWidth,
+         y:(1-(c.y*.5+.5))*renderer.domElement.clientHeight,
+         z:c.z};
 }
 
-/* ── BUILD SCENE ── */
 /* Center brain */
-var brainGeo=new THREE.SphereGeometry(28,32,32);
-var brainMat=new THREE.MeshPhongMaterial({color:0x4c1d95,emissive:0x2a0a6b,shininess:60});
-var brain=new THREE.Mesh(brainGeo,brainMat);
-pivot.add(brain);
-/* Glow ring */
-var glowGeo=new THREE.SphereGeometry(38,16,16);
-var glowMat=new THREE.MeshBasicMaterial({color:0xa78bfa,transparent:true,opacity:0.06,side:THREE.BackSide});
-pivot.add(new THREE.Mesh(glowGeo,glowMat));
-var brainLbl=mkLabel("brain","\u{1F9E0} Samyak","brain","#a78bfa");
+pivot.add((function(){
+  var g=new THREE.SphereGeometry(28,32,32);
+  var m=new THREE.MeshPhongMaterial({color:0x4c1d95,emissive:0x2a0864,shininess:80});
+  var mesh=new THREE.Mesh(g,m);
+  var gw=new THREE.Mesh(new THREE.SphereGeometry(40,16,16),
+    new THREE.MeshBasicMaterial({color:0xa78bfa,transparent:true,opacity:0.05,side:THREE.BackSide}));
+  var grp=new THREE.Group();grp.add(mesh);grp.add(gw);return grp;
+})());
+var brainLbl=mkLbl("brain","\u{1F9E0} Samyak","core","#a78bfa");
 
-/* Category nodes */
+/* Categories + facts */
 CATS.forEach(function(cat,i){
-  var elevation=(i%2===0?1:-1)*28*Math.PI/180;
-  var azimuth=(i*60)*Math.PI/180;
+  var elev=(i%2===0?1:-1)*28*Math.PI/180;
+  var az=(i*60)*Math.PI/180;
   var R=190;
-  var x=R*Math.cos(elevation)*Math.cos(azimuth);
-  var y=R*Math.sin(elevation);
-  var z=R*Math.cos(elevation)*Math.sin(azimuth);
-  catPos3D[cat.id]={x:x,y:y,z:z};
-
+  var cx=R*Math.cos(elev)*Math.cos(az),cy=R*Math.sin(elev),cz=R*Math.cos(elev)*Math.sin(az);
+  catPos3D[cat.id]={x:cx,y:cy,z:cz};
   var pl=PAL[cat.ci];
-  /* Node sphere */
-  var geo=new THREE.SphereGeometry(15,16,16);
-  var mat=new THREE.MeshPhongMaterial({color:pl.hex,emissive:new THREE.Color(pl.hex).multiplyScalar(0.3),shininess:80});
-  var mesh=new THREE.Mesh(geo,mat);
-  mesh.position.set(x,y,z);
-  mesh.userData={type:"cat",cat:cat,catIdx:i};
-  pivot.add(mesh);
-  clickable.push(mesh);
-  catMeshes[cat.id]=mesh;
 
-  /* Glow */
-  var gg=new THREE.SphereGeometry(22,8,8);
-  var gm=new THREE.MeshBasicMaterial({color:pl.hex,transparent:true,opacity:0.07,side:THREE.BackSide});
-  var gw=new THREE.Mesh(gg,gm);
-  gw.position.set(x,y,z);
-  pivot.add(gw);
+  /* Cat sphere */
+  var cg=new THREE.SphereGeometry(14,16,16);
+  var cm=new THREE.MeshPhongMaterial({color:pl.h,emissive:new THREE.Color(pl.h).multiplyScalar(0.25),shininess:100});
+  var cmesh=new THREE.Mesh(cg,cm);
+  cmesh.position.set(cx,cy,cz);
+  cmesh.userData={type:"cat",cat:cat};
+  pivot.add(cmesh);clickable.push(cmesh);catMesh[cat.id]=cmesh;
 
-  /* Line center→cat */
-  pivot.add(mkLine([new THREE.Vector3(0,0,0),new THREE.Vector3(x,y,z)],pl.hex,0.28));
+  /* Cat glow */
+  var cgl=new THREE.Mesh(new THREE.SphereGeometry(20,8,8),
+    new THREE.MeshBasicMaterial({color:pl.h,transparent:true,opacity:0.06,side:THREE.BackSide}));
+  cgl.position.set(cx,cy,cz);pivot.add(cgl);
+
+  /* Center → cat line */
+  pivot.add(mkLine([new THREE.Vector3(0,0,0),new THREE.Vector3(cx,cy,cz)],pl.h,0.25));
 
   /* Label */
-  var lbl=mkLabel(cat.id,cat.emoji+" "+cat.label,cat.facts.length+" nodes",pl.c);
-  catLabels.push({el:lbl,pos:new THREE.Vector3(x,y,z),cat:cat});
+  var lbl=mkLbl(cat.id,cat.emoji+" "+cat.label,cat.facts.length+" nodes",pl.c);
+  catLabels.push({el:lbl,p:new THREE.Vector3(cx,cy,cz),cat:cat});
 
-  /* Fact nodes */
-  var fpts=fibSphere(cat.facts.length,72);
+  /* Facts */
+  var fpts=fibSphere(cat.facts.length,70);
   cat.facts.forEach(function(fact,fi){
-    var lp=fpts[fi];
-    var wx=x+lp.x,wy=y+lp.y,wz=z+lp.z;
+    var fp=fpts[fi];
+    var wx=cx+fp.x,wy=cy+fp.y,wz=cz+fp.z;
     factPos3D[fact.id]={x:wx,y:wy,z:wz};
-
-    var fg=new THREE.SphereGeometry(5,8,8);
-    var fm=new THREE.MeshPhongMaterial({color:pl.hex,emissive:new THREE.Color(pl.hex).multiplyScalar(0.2),transparent:true,opacity:0.8,shininess:60});
-    var fm2=new THREE.Mesh(fg,fm);
-    fm2.position.set(wx,wy,wz);
-    fm2.userData={type:"fact",fact:fact,cat:cat,catPl:PAL_FULL[cat.ci]};
-    pivot.add(fm2);
-    clickable.push(fm2);
-    factMeshes[fact.id]=fm2;
-
-    /* Line cat→fact */
-    pivot.add(mkLine([new THREE.Vector3(x,y,z),new THREE.Vector3(wx,wy,wz)],pl.hex,0.15));
+    var fm=new THREE.Mesh(new THREE.SphereGeometry(5,8,8),
+      new THREE.MeshPhongMaterial({color:pl.h,emissive:new THREE.Color(pl.h).multiplyScalar(0.15),transparent:true,opacity:0.8,shininess:60}));
+    fm.position.set(wx,wy,wz);
+    fm.userData={type:"fact",fact:fact,cat:cat};
+    pivot.add(fm);clickable.push(fm);factMesh[fact.id]=fm;
+    pivot.add(mkLine([new THREE.Vector3(cx,cy,cz),new THREE.Vector3(wx,wy,wz)],pl.h,0.12));
   });
 });
 
 /* Cross-connections */
 Object.keys(CROSS).forEach(function(type){
-  var col=CROSS_COL[type];
   CROSS[type].forEach(function(pair){
     var p1=factPos3D[pair[0]],p2=factPos3D[pair[1]];
     if(!p1||!p2)return;
-    var line=mkLine([new THREE.Vector3(p1.x,p1.y,p1.z),new THREE.Vector3(p2.x,p2.y,p2.z)],col,0.1);
-    crossLines.push({line:line,pair:pair,type:type,col:col});
+    var line=mkLine([new THREE.Vector3(p1.x,p1.y,p1.z),new THREE.Vector3(p2.x,p2.y,p2.z)],CROSS_INT[type],0.1);
+    crossLines.push({line:line,pair:pair,type:type});
     pivot.add(line);
   });
 });
 
-/* ── INTERACTION ── */
+/* ══════════════════════════════════════
+   STATE + HUD
+══════════════════════════════════════ */
 var activeCat=null,selFact=null,query="";
-var isDragging=false,prevX=0,prevY=0,rotY=0,rotX=0,autoRot=true;
-var movedDuringDrag=false;
+var hudNode3D=null; /* The 3D Vector3 of the active node (world-local) */
 
-/* Update cross-connection opacity based on selection */
-function updateConnections(){
-  crossLines.forEach(function(cl){
-    var active=selFact&&(selFact.id===cl.pair[0]||selFact.id===cl.pair[1]);
-    var catActive=activeCat&&(factPos3D[cl.pair[0]]&&catForFact(cl.pair[0])===activeCat||catForFact(cl.pair[1])===activeCat);
-    cl.line.material.opacity=active?0.75:catActive?0.4:0.1;
-    cl.line.material.color.setHex(cl.col);
-  });
-}
 function catForFact(fid){
-  var found=null;
-  CATS.forEach(function(c){c.facts.forEach(function(f){if(f.id===fid)found=c.id;});});
-  return found;
+  var r=null;CATS.forEach(function(c){c.facts.forEach(function(f){if(f.id===fid)r=c.id;});});return r;
+}
+function findFact(fid){
+  var r=null;CATS.forEach(function(c){c.facts.forEach(function(f){if(f.id===fid)r={fact:f,cat:c};});});return r;
+}
+function getConn(fact){
+  var res=[],all=CROSS.tech.concat(CROSS.challenge).concat(CROSS.design);
+  var types=[];
+  CROSS.tech.forEach(function(){types.push("tech");});
+  CROSS.challenge.forEach(function(){types.push("challenge");});
+  CROSS.design.forEach(function(){types.push("design");});
+  all.forEach(function(p,i){
+    if(p[0]===fact.id)res.push({id:p[1],t:types[i]});
+    else if(p[1]===fact.id)res.push({id:p[0],t:types[i]});
+  });
+  return res;
 }
 
-/* Update node sizes/emissive */
-function updateNodeHighlights(){
-  CATS.forEach(function(cat){
-    var m=catMeshes[cat.id],isA=activeCat===cat.id;
-    m.scale.setScalar(isA?1.25:1);
-    m.material.emissive=new THREE.Color(PAL[cat.ci].hex).multiplyScalar(isA?0.5:0.3);
-    cat.facts.forEach(function(fact){
-      var fm=factMeshes[fact.id];
-      var isSel=selFact&&selFact.id===fact.id;
-      var inSearch=query&&(fact.label.toLowerCase().indexOf(query)>=0||fact.full.toLowerCase().indexOf(query)>=0);
-      fm.scale.setScalar(isSel?2.5:inSearch?1.8:isA?1.3:1);
-      fm.material.opacity=isSel?1:inSearch?1:isA?0.85:query?0.2:0.75;
+function showHudFact(fact,cat,nodeLocalPos){
+  selFact=fact;activeCat=cat.id;
+  hudNode3D=nodeLocalPos.clone();
+  var pl=PAL[cat.ci];
+  var hud=document.getElementById("hud");
+  hud.style.setProperty("--ac",pl.c);
+  document.getElementById("hudAccent").style.background="linear-gradient(to right,"+pl.c+",transparent)";
+  document.getElementById("hudCat").textContent=cat.emoji+"  "+cat.label.toUpperCase();
+  document.getElementById("hudCat").style.color=pl.c;
+  var conn=getConn(fact);
+  var connHTML="";
+  if(conn.length){
+    connHTML='<div class="hud-row-lbl">connected to</div><div class="hud-row">';
+    conn.forEach(function(c){
+      var r=findFact(c.id);if(!r)return;
+      var col=CROSS_HEX[c.t];
+      connHTML+='<button class="hud-pill" style="color:'+col+';border-color:'+col+'44" data-fid="'+r.fact.id+'">'+r.fact.label+'</button>';
+    });
+    connHTML+='</div>';
+  }
+  document.getElementById("hudBody").innerHTML=
+    '<div class="hud-name">'+fact.label+'</div>'+
+    '<div class="hud-full">'+fact.full+'</div>'+
+    connHTML+
+    '<div class="hud-actions"><button class="hud-copy" id="hcopy">&#128203; copy</button></div>';
+  document.getElementById("hcopy").onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(fact.full).catch(function(){});};
+  document.querySelectorAll(".hud-pill").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var r=findFact(btn.dataset.fid);if(!r)return;
+      var fp=factPos3D[r.fact.id];
+      showHudFact(r.fact,r.cat,new THREE.Vector3(fp.x,fp.y,fp.z));
+      updateHighlights();
     });
   });
+  hud.classList.remove("show");
+  void hud.offsetWidth;
+  hud.classList.add("show");
+  updateHighlights();
 }
 
-/* Drag handlers */
-wrap.addEventListener("mousedown",function(e){isDragging=true;movedDuringDrag=false;prevX=e.clientX;prevY=e.clientY;autoRot=false;});
+function showHudCat(cat,nodeLocalPos){
+  selFact=null;activeCat=cat.id;
+  hudNode3D=nodeLocalPos.clone();
+  var pl=PAL[cat.ci];
+  var hud=document.getElementById("hud");
+  hud.style.setProperty("--ac",pl.c);
+  document.getElementById("hudAccent").style.background="linear-gradient(to right,"+pl.c+",transparent)";
+  document.getElementById("hudCat").textContent=cat.emoji+"  "+cat.label.toUpperCase();
+  document.getElementById("hudCat").style.color=pl.c;
+  var factsHTML='<div class="hud-row-lbl">'+cat.facts.length+' memories</div><div class="hud-grid">';
+  cat.facts.forEach(function(fact){
+    factsHTML+='<button class="hud-fact-btn" style="color:'+pl.c+';border-color:'+pl.c+'33" data-fid="'+fact.id+'">'+fact.label+'</button>';
+  });
+  factsHTML+='</div>';
+  document.getElementById("hudBody").innerHTML=factsHTML;
+  document.querySelectorAll(".hud-fact-btn").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var r=findFact(btn.dataset.fid);if(!r)return;
+      var fp=factPos3D[r.fact.id];
+      showHudFact(r.fact,r.cat,new THREE.Vector3(fp.x,fp.y,fp.z));
+      updateHighlights();
+    });
+  });
+  hud.classList.remove("show");
+  void hud.offsetWidth;
+  hud.classList.add("show");
+  updateHighlights();
+}
+
+function hideHud(){
+  document.getElementById("hud").classList.remove("show");
+  setTimeout(function(){document.getElementById("hud").style.display="none";},200);
+  activeCat=null;selFact=null;hudNode3D=null;
+  document.getElementById("connLine").setAttribute("stroke-opacity","0");
+  updateHighlights();
+}
+
+/* Position the HUD card near the node */
+function positionHud(){
+  var hud=document.getElementById("hud");
+  if(!hudNode3D||!hud.classList.contains("show"))return;
+  var wv=hudNode3D.clone();
+  pivot.localToWorld(wv);
+  var p=to2D(wv);
+  if(p.z>1){hud.style.opacity="0";return;}
+  hud.style.opacity="1";
+  var sw=wrap.clientWidth,sh=wrap.clientHeight;
+  var cw=244,ch=hud.offsetHeight||200;
+  var margin=14;
+  var x,y,arrowSide;
+  /* Horizontal: prefer right side */
+  if(p.x+30+cw+margin<=sw){x=p.x+30;arrowSide="left";}
+  else if(p.x-30-cw-margin>=0){x=p.x-30-cw;arrowSide="right";}
+  else{x=Math.max(margin,Math.min(p.x-cw/2,sw-cw-margin));arrowSide="none";}
+  /* Vertical: center on node, clamp */
+  y=Math.max(margin,Math.min(p.y-ch/2,sh-ch-margin));
+  hud.style.left=x+"px";
+  hud.style.top=y+"px";
+
+  /* Connector line */
+  var cl=document.getElementById("connLine");
+  /* Line from node to nearest card edge */
+  var cardMidY=y+ch/2;
+  var ex=arrowSide==="left"?x:x+cw;
+  cl.setAttribute("x1",p.x);cl.setAttribute("y1",p.y);
+  cl.setAttribute("x2",ex);cl.setAttribute("y2",cardMidY);
+  var ac=PAL[activeCat?CATS.find(function(c){return c.id===activeCat;})||{ci:0}:{}];
+  var acColor=activeCat?PAL[CATS.find(function(c){return c.id===activeCat;}).ci].c:"#a78bfa";
+  cl.setAttribute("stroke",acColor);
+  cl.setAttribute("stroke-opacity","0.35");
+}
+
+/* Node highlight updates */
+function updateHighlights(){
+  CATS.forEach(function(cat){
+    var cm=catMesh[cat.id],isA=activeCat===cat.id;
+    cm.scale.setScalar(isA?1.3:1);
+    cm.material.emissive=new THREE.Color(PAL[cat.ci].h).multiplyScalar(isA?0.45:0.22);
+    cat.facts.forEach(function(f){
+      var fm=factMesh[f.id];
+      var isSel=selFact&&selFact.id===f.id;
+      var inQ=query&&(f.label.toLowerCase().indexOf(query)>=0||f.full.toLowerCase().indexOf(query)>=0);
+      fm.scale.setScalar(isSel?2.6:inQ?2:isA?1.4:1);
+      fm.material.opacity=isSel?1:inQ?0.95:isA?0.85:query?0.18:0.75;
+    });
+  });
+  crossLines.forEach(function(cl){
+    var isActive=selFact&&(selFact.id===cl.pair[0]||selFact.id===cl.pair[1]);
+    var isCatA=activeCat&&(catForFact(cl.pair[0])===activeCat||catForFact(cl.pair[1])===activeCat);
+    cl.line.material.opacity=isActive?0.75:isCatA?0.38:0.08;
+  });
+}
+
+/* ══════════════════════════════════════
+   INTERACTION
+══════════════════════════════════════ */
+var isDrag=false,prevX=0,prevY=0,rotY=0,rotX=0,autoRot=true,moved=false;
+
+wrap.addEventListener("mousedown",function(e){isDrag=true;moved=false;prevX=e.clientX;prevY=e.clientY;autoRot=false;});
 window.addEventListener("mousemove",function(e){
-  if(!isDragging)return;
+  if(!isDrag)return;
   var dx=e.clientX-prevX,dy=e.clientY-prevY;
-  if(Math.abs(dx)+Math.abs(dy)>2)movedDuringDrag=true;
-  rotY+=(e.clientX-prevX)*0.006;rotX+=(e.clientY-prevY)*0.006;
-  rotX=Math.max(-1.1,Math.min(1.1,rotX));
+  if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
+  rotY+=dx*.006;rotX+=dy*.006;rotX=Math.max(-1.1,Math.min(1.1,rotX));
   pivot.rotation.y=rotY;pivot.rotation.x=rotX;
   prevX=e.clientX;prevY=e.clientY;
 });
-window.addEventListener("mouseup",function(){isDragging=false;});
+window.addEventListener("mouseup",function(){isDrag=false;setTimeout(function(){autoRot=true;},3000);});
+wrap.addEventListener("wheel",function(e){camera.position.z=Math.max(200,Math.min(900,camera.position.z+e.deltaY*.5));},{passive:true});
 
-/* Touch handlers */
-var pinchDist=0;
+/* Touch */
+var pinch0=0;
 wrap.addEventListener("touchstart",function(e){
-  isDragging=true;movedDuringDrag=false;prevX=e.touches[0].clientX;prevY=e.touches[0].clientY;
-  if(e.touches.length===2){var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;pinchDist=Math.sqrt(dx*dx+dy*dy);}
+  isDrag=true;moved=false;prevX=e.touches[0].clientX;prevY=e.touches[0].clientY;
+  if(e.touches.length===2){var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;pinch0=Math.sqrt(dx*dx+dy*dy);}
   autoRot=false;
 },{passive:true});
 wrap.addEventListener("touchmove",function(e){
-  if(!isDragging)return;
   if(e.touches.length===2){
     var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;
-    var d=Math.sqrt(dx*dx+dy*dy),delta=d-pinchDist;
-    camera.position.z=Math.max(200,Math.min(900,camera.position.z-delta*0.8));
-    pinchDist=d;return;
+    var d=Math.sqrt(dx*dx+dy*dy);camera.position.z=Math.max(200,Math.min(900,camera.position.z-(d-pinch0)*.7));pinch0=d;return;
   }
   var ddx=e.touches[0].clientX-prevX,ddy=e.touches[0].clientY-prevY;
-  if(Math.abs(ddx)+Math.abs(ddy)>3)movedDuringDrag=true;
-  rotY+=ddx*0.007;rotX+=ddy*0.007;
-  rotX=Math.max(-1.1,Math.min(1.1,rotX));
+  if(Math.abs(ddx)+Math.abs(ddy)>3)moved=true;
+  rotY+=ddx*.007;rotX+=ddy*.007;rotX=Math.max(-1.1,Math.min(1.1,rotX));
   pivot.rotation.y=rotY;pivot.rotation.x=rotX;
   prevX=e.touches[0].clientX;prevY=e.touches[0].clientY;
 },{passive:true});
 wrap.addEventListener("touchend",function(e){
-  if(!movedDuringDrag)handleClick(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
-  isDragging=false;
+  if(!moved)handleClick(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
+  isDrag=false;setTimeout(function(){autoRot=true;},3000);
 });
 
-/* Scroll to zoom */
-wrap.addEventListener("wheel",function(e){camera.position.z=Math.max(200,Math.min(900,camera.position.z+e.deltaY*0.5));},{passive:true});
-
-/* Click */
-var raycaster=new THREE.Raycaster();
-var mouse=new THREE.Vector2();
-wrap.addEventListener("click",function(e){if(!movedDuringDrag)handleClick(e.clientX,e.clientY);movedDuringDrag=false;});
+/* Raycast click */
+var rc=new THREE.Raycaster(),mouse=new THREE.Vector2();
+wrap.addEventListener("click",function(e){if(!moved)handleClick(e.clientX,e.clientY);moved=false;});
 function handleClick(cx,cy){
   var rect=wrap.getBoundingClientRect();
   mouse.x=((cx-rect.left)/rect.width)*2-1;
   mouse.y=-((cy-rect.top)/rect.height)*2+1;
-  raycaster.setFromCamera(mouse,camera);
-  var hits=raycaster.intersectObjects(clickable);
-  if(hits.length>0){
-    var ud=hits[0].object.userData;
-    if(ud.type==="cat"){
-      activeCat=activeCat===ud.cat.id?null:ud.cat.id;
-      selFact=null;
-      if(activeCat){var pl=PAL_FULL[ud.cat.ci];if(isMob())openDrawer(ud.cat,pl,null);else renderPanel(ud.cat,pl);}
-      else{resetPanel();if(isMob())closeDrawer();}
-    } else if(ud.type==="fact"){
-      var isSel=selFact&&selFact.id===ud.fact.id;
-      selFact=isSel?null:ud.fact;
-      activeCat=ud.cat.id;
-      var pl2=ud.catPl;
-      if(selFact){if(isMob())openDrawer(ud.cat,pl2,ud.fact);else renderPanel(ud.cat,pl2);}
-      else{if(isMob())openDrawer(ud.cat,pl2,null);else renderPanel(ud.cat,pl2);}
-      /* Show floating label */
-      var fl=document.getElementById("factLabel");
-      var ft=document.getElementById("factLabelTxt");
-      if(selFact){ft.textContent=selFact.label;fl.style.display="block";}
-      else{fl.style.display="none";}
-    }
-    updateNodeHighlights();updateConnections();
-    document.getElementById("hint").style.opacity="0";
+  rc.setFromCamera(mouse,camera);
+  var hits=rc.intersectObjects(clickable);
+  if(!hits.length){return;}
+  var ud=hits[0].object.userData;
+  document.getElementById("hint").style.opacity="0";
+  if(ud.type==="cat"){
+    if(activeCat===ud.cat.id){hideHud();return;}
+    showHudCat(ud.cat,ud.cat===ud.cat?hits[0].object.position:new THREE.Vector3(catPos3D[ud.cat.id].x,catPos3D[ud.cat.id].y,catPos3D[ud.cat.id].z));
+  } else {
+    if(selFact&&selFact.id===ud.fact.id){hideHud();return;}
+    showHudFact(ud.fact,ud.cat,hits[0].object.position);
   }
 }
 
-/* Resume auto-rotation 3s after last drag */
-var autoTimer=null;
-["mouseup","touchend"].forEach(function(ev){
-  window.addEventListener(ev,function(){
-    clearTimeout(autoTimer);
-    autoTimer=setTimeout(function(){autoRot=true;},3000);
-  });
-});
-
-/* ── ANIMATION LOOP ── */
+/* ══════════════════════════════════════
+   ANIMATION LOOP
+══════════════════════════════════════ */
 function animate(){
   requestAnimationFrame(animate);
-  if(autoRot&&!isDragging){
-    rotY+=0.003;
-    pivot.rotation.y=rotY;
-  }
-  /* Pulsing brain glow */
-  var t=Date.now()*0.001;
-  pLight.intensity=1.2+Math.sin(t*1.5)*0.4;
-  /* Update label positions */
-  var brainWorld=new THREE.Vector3(0,0,0);
-  pivot.localToWorld(brainWorld);
-  var b2d=to2D(brainWorld);
-  if(!b2d.behind){brainLbl.style.left=b2d.x+"px";brainLbl.style.top=b2d.y+"px";brainLbl.style.display="block";}
-  else{brainLbl.style.display="none";}
+  if(autoRot&&!isDrag){rotY+=0.003;pivot.rotation.y=rotY;}
+  pl1.intensity=1.3+Math.sin(Date.now()*.0015)*.5;
+
+  /* Brain label */
+  var bw=new THREE.Vector3(0,0,0);pivot.localToWorld(bw);
+  var bp=to2D(bw);
+  if(bp.z<1){brainLbl.style.left=bp.x+"px";brainLbl.style.top=bp.y+"px";brainLbl.style.display="block";}
+  else brainLbl.style.display="none";
+
+  /* Category labels */
   catLabels.forEach(function(cl){
-    var wv=cl.pos.clone();
-    pivot.localToWorld(wv);
+    var wv=cl.p.clone();pivot.localToWorld(wv);
     var p2=to2D(wv);
-    if(p2.behind){cl.el.style.display="none";return;}
+    if(p2.z>1){cl.el.style.display="none";return;}
     cl.el.style.left=p2.x+"px";cl.el.style.top=p2.y+"px";cl.el.style.display="block";
-    cl.el.style.opacity=activeCat?activeCat===cl.cat.id?"1":"0.5":"1";
+    cl.el.style.opacity=(!activeCat||activeCat===cl.cat.id)?"1":"0.35";
   });
-  /* Fact label if selected */
-  if(selFact&&factPos3D[selFact.id]){
-    var fwv=new THREE.Vector3(factPos3D[selFact.id].x,factPos3D[selFact.id].y,factPos3D[selFact.id].z);
-    pivot.localToWorld(fwv);
-    var fp2=to2D(fwv);
-    var fl=document.getElementById("factLabel");
-    if(!fp2.behind){fl.style.left=fp2.x+"px";fl.style.top=fp2.y+"px";fl.style.display="block";}
-    else{fl.style.display="none";}
-  }
+
+  /* HUD position update */
+  positionHud();
+
   renderer.render(scene,camera);
 }
 animate();
 
-/* ── RESIZE ── */
+/* ══════════════════════════════════════
+   SEARCH
+══════════════════════════════════════ */
+function onSearch(v){
+  query=v.trim().toLowerCase();
+  document.getElementById("clrBtn").style.display=v?"inline-block":"none";
+  selFact=null;updateHighlights();
+}
+function clearSearch(){document.getElementById("srch").value="";onSearch("");}
+
+/* ══════════════════════════════════════
+   MODAL / RESIZE
+══════════════════════════════════════ */
+function showModal(){document.getElementById("modal").style.display="flex";}
+function hideModal(){document.getElementById("modal").style.display="none";}
 window.addEventListener("resize",function(){
   W=wrap.clientWidth;H=wrap.clientHeight;
   camera.aspect=W/H;camera.updateProjectionMatrix();
   renderer.setSize(W,H);
 });
 
-/* ── PANEL / DRAWER ── */
-function isMob(){return window.innerWidth<=640;}
-function getConnFacts(fact){
-  var res=[];
-  var all=CROSS.tech.concat(CROSS.challenge).concat(CROSS.design);
-  var types=CROSS.tech.map(function(){return"tech";}).concat(CROSS.challenge.map(function(){return"challenge";})).concat(CROSS.design.map(function(){return"design";}));
-  all.forEach(function(p,pi){
-    var t=pi<CROSS.tech.length?"tech":pi<CROSS.tech.length+CROSS.challenge.length?"challenge":"design";
-    if(p[0]===fact.id)res.push({id:p[1],type:t});
-    else if(p[1]===fact.id)res.push({id:p[0],type:t});
-  });
-  return res;
-}
-function findFact(fid){var r=null;CATS.forEach(function(c){c.facts.forEach(function(f){if(f.id===fid)r={fact:f,cat:c};});});return r;}
-function buildHTML(cat,pl,fact,facts){
-  var html="";
-  if(fact){
-    var conn=getConnFacts(fact);
-    html+='<div class="fdet" style="background:'+pl.bg+';border-color:'+pl.bd+'"><div class="fcl" style="color:'+pl.c+'">'+cat.label+'</div><div class="ftxt">'+fact.full+'</div></div>';
-    html+='<button class="cpbtn" id="cpb">Copy memory</button>';
-    if(conn.length){
-      html+='<div class="sh">Connected to</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">';
-      conn.forEach(function(c){var r=findFact(c.id);if(!r)return;var col=CROSS_HEX[c.type];html+='<span class="conn-tag" style="color:'+col+';border-color:'+col+'44;background:'+col+'11" data-fid="'+r.fact.id+'">'+r.fact.label+'</span>';});
-      html+='</div>';
-    }
-    html+='<div class="sh">Others in '+cat.label+'</div>';
-    cat.facts.filter(function(f){return f.id!==fact.id;}).slice(0,5).forEach(function(f){html+='<div class="ri" data-fid="'+f.id+'">'+f.label+'</div>';});
-  } else {
-    html+='<div style="font-size:10px;color:#475569;margin-bottom:10px">'+facts.length+' memories &bull; tap a dot to see connections</div>';
-    facts.forEach(function(f){html+='<div class="li" data-fid="'+f.id+'"><div class="lt">'+f.label+'</div><div class="ls">'+f.full+'</div></div>';});
-  }
-  return html;
-}
-function bindEvents(container,cat,pl){
-  var cp=container.querySelector("#cpb");
-  if(cp)cp.onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(selFact.full).catch(function(){});};
-  container.querySelectorAll(".conn-tag").forEach(function(e){
-    e.addEventListener("click",function(){
-      var r=findFact(e.dataset.fid);if(!r)return;
-      selFact=r.fact;activeCat=r.cat.id;
-      updateNodeHighlights();updateConnections();
-      var rpl=PAL_FULL[r.cat.ci];
-      if(isMob())openDrawer(r.cat,rpl,r.fact);else renderPanel(r.cat,rpl);
-      document.getElementById("factLabelTxt").textContent=selFact.label;
-      document.getElementById("factLabel").style.display="block";
-    });
-  });
-  container.querySelectorAll(".ri,.li").forEach(function(e){
-    e.addEventListener("click",function(){
-      var f=cat.facts.find(function(x){return x.id===e.dataset.fid;});
-      if(!f)return;
-      selFact=f;activeCat=cat.id;
-      updateNodeHighlights();updateConnections();
-      if(isMob())openDrawer(cat,pl,f);else renderPanel(cat,pl);
-      document.getElementById("factLabelTxt").textContent=f.label;
-      document.getElementById("factLabel").style.display="block";
-    });
-  });
-}
-function renderPanel(cat,pl){
-  document.getElementById("dpt").innerHTML=cat.emoji+" "+cat.label;
-  document.getElementById("dps").textContent=selFact?selFact.label:cat.facts.length+" memories";
-  var facts=query?cat.facts.filter(function(f){return f.label.toLowerCase().indexOf(query)>=0||f.full.toLowerCase().indexOf(query)>=0;}):cat.facts;
-  var pb=document.getElementById("dpb");
-  pb.innerHTML=buildHTML(cat,pl,selFact,facts);
-  bindEvents(pb,cat,pl);
-}
-function resetPanel(){
-  document.getElementById("dpt").textContent="Memory Tree 3D";
-  document.getElementById("dps").textContent="Drag to rotate \u2022 tap nodes";
-  document.getElementById("dpb").innerHTML='<div class="emp"><p style="font-size:32px;margin-bottom:8px">&#129504;</p><p style="font-size:11px;line-height:1.8;color:#475569">All nodes visible in 3D space.<br>Drag to rotate the scene.<br>Tap any node to see details.</p></div>';
-}
-function openDrawer(cat,pl,fact){
-  document.getElementById("dtitle").innerHTML=cat.emoji+" "+cat.label;
-  var facts=query?cat.facts.filter(function(f){return f.label.toLowerCase().indexOf(query)>=0||f.full.toLowerCase().indexOf(query)>=0;}):cat.facts;
-  var db=document.getElementById("dbody");
-  db.innerHTML=buildHTML(cat,pl,fact,facts);
-  bindEvents(db,cat,pl);
-  document.getElementById("drawer").classList.add("open");
-}
-function closeDrawer(){document.getElementById("drawer").classList.remove("open");}
-
-function onSearch(v){
-  query=v.trim().toLowerCase();
-  document.getElementById("clrBtn").style.display=v?"inline-block":"none";
-  selFact=null;updateNodeHighlights();updateConnections();
-}
-function clearSearch(){document.getElementById("srch").value="";onSearch("");}
-function showModal(){document.getElementById("modal").style.display="flex";}
-function hideModal(){document.getElementById("modal").style.display="none";}
-
-/* ── INIT ── */
-document.getElementById("sd").textContent="Synced: "+MEMORY_DATA.lastSynced;
-document.getElementById("stTotal").textContent=CATS.reduce(function(a,c){return a+c.facts.length;},0);
-updateNodeHighlights();updateConnections();
-setTimeout(function(){document.getElementById("hint").style.opacity="0";},4000);
+/* INIT */
+document.getElementById("sd").textContent=MEMORY_DATA.lastSynced;
+setTimeout(function(){document.getElementById("hint").style.opacity="0";},5000);
 </script>
 </body>
 </html>
