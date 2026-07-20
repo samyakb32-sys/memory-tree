@@ -156,322 +156,122 @@ var CROSS={
 var CROSS_HEX={tech:"#60a5fa",challenge:"#34d399",design:"#f472b6"};
 var CROSS_INT={tech:0x60a5fa,challenge:0x34d399,design:0xf472b6};
 
-var PAL=[
-  {c:"#a78bfa",h:0xa78bfa},{c:"#60a5fa",h:0x60a5fa},{c:"#34d399",h:0x34d399},
-  {c:"#fbbf24",h:0xfbbf24},{c:"#f97316",h:0xf97316},{c:"#f472b6",h:0xf472b6}
-];
 
-var wrap=document.getElementById("wrap");
-var canvas=document.getElementById("c");
-var scene=new THREE.Scene();
-scene.background=new THREE.Color(0x07070f);
-var W=wrap.clientWidth,H=wrap.clientHeight;
-var camera=new THREE.PerspectiveCamera(55,W/H,0.1,5000);
-camera.position.set(0,0,520);
-var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.setSize(W,H);
+/* ══ SUB-FACTS (3rd level) ══ */
+var SUBS={
+  i1:[{id:"i1a",l:"CS25041",f:"University roll number: CS25041"}],
+  i3:[{id:"i3a",l:"CSE Dept",f:"Computer Science Engineering department"},
+      {id:"i3b",l:"Nagpur campus",f:"Located in Nagpur, Maharashtra"}],
+  i4:[{id:"i4a",l:"1st Year",f:"Currently in first year (2025 batch)"},
+      {id:"i4b",l:"SBJITMR",f:"SB Jain Institute of Technology, Management & Research"}],
+  p1:[{id:"p1a",l:"Java",f:"Core language for Halcyon Android app"},
+      {id:"p1b",l:"Pollinations.ai",f:"Free keyless AI backend for text generation"},
+      {id:"p1c",l:"Groq fallback",f:"Groq llama-3.3-70b as AI fallback"},
+      {id:"p1d",l:"Hinglish UI",f:"UI and responses in Hindi-English mix"}],
+  p2:[{id:"p2a",l:"Room DB",f:"SQLite abstraction for storing reminders"},
+      {id:"p2b",l:"AlarmManager",f:"System alarms for reminder notifications"},
+      {id:"p2c",l:"Live Video BG",f:"Live/video background theme switcher"},
+      {id:"p2d",l:"Notif Channels",f:"Android notification channels for alerts"}],
+  p3:[{id:"p3a",l:"Electron",f:"Desktop app framework wrapping web tech"},
+      {id:"p3b",l:"React",f:"UI built with React components and hooks"},
+      {id:"p3c",l:"ADB/scrcpy",f:"Android Debug Bridge + screen mirror"},
+      {id:"p3d",l:"NSIS",f:"NSIS installer for Windows .exe distribution"}],
+  p4:[{id:"p4a",l:"PdfBox",f:"Apache PdfBox for full-text PDF indexing"},
+      {id:"p4b",l:"AI Chat",f:"In-app AI chat about PDF content"},
+      {id:"p4c",l:"Home Shortcuts",f:"Android home screen shortcuts to files"}],
+  p5:[{id:"p5a",l:"Pollinations Image",f:"Free keyless image generation API"},
+      {id:"p5b",l:"Room DB",f:"Local favorites database with Room"},
+      {id:"p5c",l:"Prompt Builder",f:"Custom prompt builder for wallpaper styles"}],
+  p6:[{id:"p6a",l:"Three.js sphere",f:"3D rotating tech sphere on portfolio hero"},
+      {id:"p6b",l:"base64 assets",f:"All images base64-encoded for single-file deploy"},
+      {id:"p6c",l:"GitHub Pages",f:"Free static hosting on GitHub Pages"},
+      {id:"p6d",l:"Single HTML",f:"Entire portfolio in one HTML file"}],
+  p7:[{id:"p7a",l:"Supabase",f:"PostgreSQL + auth + storage backend"},
+      {id:"p7b",l:"Vercel",f:"Serverless deployment on Vercel"},
+      {id:"p7c",l:"Multi-seller",f:"Multiple seller accounts supported"},
+      {id:"p7d",l:"Admin panel",f:"Admin dashboard for managing listings"}],
+  p8:[{id:"p8a",l:"AI Study Plan",f:"AI-generated study schedules"},
+      {id:"p8b",l:"PYQ Explainer",f:"Previous year questions explained by AI"},
+      {id:"p8c",l:"Bunk Calc",f:"Calculates safe bunk attendance percentage"},
+      {id:"p8d",l:"PWA offline",f:"Progressive Web App with offline support"}],
+  p9:[{id:"p9a",l:"AI Suggestions",f:"AI-powered template design suggestions"},
+      {id:"p9b",l:"Code Export",f:"Export customized templates as code"},
+      {id:"p9c",l:"Canva-like UI",f:"Drag-and-drop style template editor"}],
+  p10:[{id:"p10a",l:"@SamyakPathan",f:"Freelancer.in profile username"},
+       {id:"p10b",l:"No-interview",f:"No-interview projects preferred"},
+       {id:"p10c",l:"Bid + deliver",f:"Direct bid → deliver workflow"}],
+  c1:[{id:"c1a",l:"Mood detection",f:"Detects user mood via text input"},
+      {id:"c1b",l:"Ambient audio",f:"Background audio matching the mood"},
+      {id:"c1c",l:"Color themes",f:"Color palette shifts with mood"}],
+  c2:[{id:"c2a",l:"Paste code",f:"User pastes code for roasting"},
+      {id:"c2b",l:"AI roast",f:"AI gives humorous harsh code review"},
+      {id:"c2c",l:"Share result",f:"Share roast result as image"}],
+  c3:[{id:"c3a",l:"Code editor",f:"Browser-based code editor UI"},
+      {id:"c3b",l:"AI assist",f:"AI code completion and suggestions"},
+      {id:"c3c",l:"Multi-file",f:"Supports multiple file tabs"}],
+  c6:[{id:"c6a",l:"Habit tracking",f:"Track daily habits with streaks"},
+      {id:"c6b",l:"Offline PWA",f:"Works fully offline as PWA"},
+      {id:"c6c",l:"Streak system",f:"Motivational streak counter"}],
+  c8:[{id:"c8a",l:"15 projects",f:"One HTML file per day challenge"},
+      {id:"c8b",l:"Pollinations",f:"All use Pollinations.ai as AI backend"},
+      {id:"c8c",l:"7 done",f:"Days 1,2,5,6,7,8,9 completed so far"}],
+  s1:[{id:"s1a",l:"Room DB",f:"SQLite ORM for Android data persistence"},
+      {id:"s1b",l:"AlarmManager",f:"System-level alarm scheduling"},
+      {id:"s1c",l:"RecyclerView",f:"Efficient list/grid view rendering"},
+      {id:"s1d",l:"Fragments",f:"Modular UI with Android Fragments"}],
+  s2:[{id:"s2a",l:"Tailwind CDN",f:"Utility-first CSS via CDN link"},
+      {id:"s2b",l:"Vanilla JS",f:"No framework — pure JavaScript"},
+      {id:"s2c",l:"Single file",f:"All CSS+JS+HTML in one file"}],
+  s3:[{id:"s3a",l:"Electron shell",f:"Chrome-based desktop shell"},
+      {id:"s3b",l:"React UI",f:"Component-based UI with React hooks"},
+      {id:"s3c",l:"IPC bridge",f:"Main↔renderer inter-process comms"}],
+  s4:[{id:"s4a",l:"Text API",f:"Free text generation: pollinations.ai/openai"},
+      {id:"s4b",l:"Image API",f:"Free image gen: image.pollinations.ai"},
+      {id:"s4c",l:"No API key",f:"Zero authentication required"},
+      {id:"s4d",l:"Always free",f:"Completely free, no rate limits enforced"}],
+  s5:[{id:"s5a",l:"llama-3.3-70b",f:"Groq model: llama-3.3-70b-versatile"},
+      {id:"s5b",l:"Gemini Pro",f:"Google Gemini Pro for vision tasks"},
+      {id:"s5c",l:"Fallback chain",f:"Pollinations → Groq → Gemini fallback"}],
+  s6:[{id:"s6a",l:"samyakb32-sys",f:"Android projects GitHub account"},
+      {id:"s6b",l:"samyakbcse25",f:"Web/college projects GitHub account"},
+      {id:"s6c",l:"Free hosting",f:"Free static site hosting with CDN"}],
+  s7:[{id:"s7a",l:"Supabase DB",f:"PostgreSQL database with REST API"},
+      {id:"s7b",l:"Vercel deploy",f:"Serverless functions + static hosting"},
+      {id:"s7c",l:"Row security",f:"Supabase row-level security policies"}],
+  s8:[{id:"s8a",l:"Three.js r134",f:"WebGL 3D rendering, version r134"},
+      {id:"s8b",l:"ScrollTrigger",f:"GSAP ScrollTrigger for scroll animations"},
+      {id:"s8c",l:"CDN loaded",f:"Both loaded via CDN, no npm needed"}],
+  pr1:[{id:"pr1a",l:"Hindi words",f:"Hindi words mixed naturally in speech"},
+       {id:"pr1b",l:"English base",f:"English as the structural base language"},
+       {id:"pr1c",l:"Casual tone",f:"Casual conversational style always"}],
+  pr2:[{id:"pr2a",l:"Phone only",f:"Builds entirely from phone when needed"},
+       {id:"pr2b",l:"GitHub Actions",f:"Cloud APK compilation via GitHub Actions"},
+       {id:"pr2c",l:"Web IDE",f:"Uses web-based IDEs for coding on phone"}],
+  pr4:[{id:"pr4a",l:"Pollinations",f:"Primary: Pollinations.ai (text+image)"},
+       {id:"pr4b",l:"Groq free",f:"Secondary: Groq free tier"},
+       {id:"pr4c",l:"Zero cost",f:"Entire AI stack costs nothing"}],
+  d1:[{id:"d1a",l:"Page-load anims",f:"Entrance animations for page elements"},
+      {id:"d1b",l:"Scroll anims",f:"Scroll-triggered reveal animations"},
+      {id:"d1c",l:"CSS library",f:"Pure CSS animation classes"}],
+  d2:[{id:"d2a",l:"React comps",f:"Pre-built React UI components"},
+      {id:"d2b",l:"Tailwind based",f:"Styled with Tailwind utility classes"},
+      {id:"d2c",l:"Copy-paste",f:"Copy component code directly"}],
+  d4:[{id:"d4a",l:"Aurora",f:"Animated aurora/gradient background"},
+      {id:"d4b",l:"Fluid",f:"Fluid morphing blob animation"},
+      {id:"d4c",l:"Magnetic",f:"Magnetic cursor follow effect"},
+      {id:"d4d",l:"Noise field",f:"Perlin noise field animation"}],
+  d5:[{id:"d5a",l:"Design tokens",f:"Color, spacing, typography tokens"},
+      {id:"d5b",l:"Vercel style",f:"Vercel-inspired dark design system"},
+      {id:"d5c",l:"Linear style",f:"Linear app-inspired clean aesthetic"}]
+};
 
-(function(){
-  var a=[],b=[];
-  for(var i=0;i<700;i++)a.push((Math.random()-.5)*2800,(Math.random()-.5)*2800,(Math.random()-.5)*2800);
-  for(var j=0;j<400;j++)b.push((Math.random()-.5)*2400,(Math.random()-.5)*2400,(Math.random()-.5)*2400);
-  var g=new THREE.BufferGeometry(),g2=new THREE.BufferGeometry();
-  g.setAttribute("position",new THREE.Float32BufferAttribute(a,3));
-  g2.setAttribute("position",new THREE.Float32BufferAttribute(b,3));
-  scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:2.8,transparent:true,opacity:0.9,sizeAttenuation:true})));
-  scene.add(new THREE.Points(g2,new THREE.PointsMaterial({color:0xc4b5fd,size:1.8,transparent:true,opacity:0.7,sizeAttenuation:true})));
-})();
 
-scene.add(new THREE.AmbientLight(0xffffff,0.7));
-var pl1=new THREE.PointLight(0xa78bfa,1.8,700);pl1.position.set(60,120,200);scene.add(pl1);
-(function(){var l2=new THREE.PointLight(0x60a5fa,1.0,500);l2.position.set(-120,-80,150);scene.add(l2);})();
-
-var pivot=new THREE.Group();scene.add(pivot);
-
-var CATS=MEMORY_DATA.categories;
-var clickable=[],catMesh={},factMesh={},catPos3D={},factPos3D={},crossLines=[],catLabels=[];
-
-function mkTube(p1,p2,col,op,r){
-  var dir=new THREE.Vector3().subVectors(p2,p1),len=dir.length();
-  if(len<0.01)return new THREE.Object3D();
-  var m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,6,1,false),
-    new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op}));
-  m.position.copy(new THREE.Vector3().addVectors(p1,p2).multiplyScalar(0.5));
-  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());
-  return m;
-}
-function fibSphere(n,r){
-  var pts=[],phi=Math.PI*(3-Math.sqrt(5));
-  for(var i=0;i<n;i++){
-    var y=1-(i/Math.max(n-1,1))*2,rad=Math.sqrt(Math.max(0,1-y*y)),t=phi*i;
-    pts.push(new THREE.Vector3(r*rad*Math.cos(t),r*y,r*rad*Math.sin(t)));
-  }
-  return pts;
-}
-function mkLbl(id,txt,sub,col){
-  var d=document.createElement("div");d.className="nlbl";d.id="lbl_"+id;
-  d.innerHTML='<div class="nt" style="color:'+col+';border-color:'+col+'33">'+txt+'</div>'+(sub?'<div class="ns">'+sub+'</div>':'');
-  document.getElementById("labels").appendChild(d);return d;
-}
-function to2D(v){
-  var c=v.clone().project(camera);
-  return{x:(c.x*.5+.5)*renderer.domElement.clientWidth,y:(1-(c.y*.5+.5))*renderer.domElement.clientHeight,z:c.z};
-}
-
-(function(){
-  var g=new THREE.Group();
-  g.add(new THREE.Mesh(new THREE.SphereGeometry(28,32,32),
-    new THREE.MeshPhongMaterial({color:0x4c1d95,emissive:0x2a0864,shininess:80})));
-  g.add(new THREE.Mesh(new THREE.SphereGeometry(40,16,16),
-    new THREE.MeshBasicMaterial({color:0xa78bfa,transparent:true,opacity:0.05,side:THREE.BackSide})));
-  pivot.add(g);
-})();
-var brainLbl=mkLbl("brain","\u{1F9E0} Samyak","core","#a78bfa");
-
-CATS.forEach(function(cat,i){
-  var elev=(i%2===0?1:-1)*28*Math.PI/180,az=(i*60)*Math.PI/180,R=190;
-  var cx=R*Math.cos(elev)*Math.cos(az),cy=R*Math.sin(elev),cz=R*Math.cos(elev)*Math.sin(az);
-  catPos3D[cat.id]={x:cx,y:cy,z:cz};
-  var pl=PAL[cat.ci];
-  var cm=new THREE.Mesh(new THREE.SphereGeometry(14,16,16),
-    new THREE.MeshPhongMaterial({color:pl.h,emissive:new THREE.Color(pl.h).multiplyScalar(0.25),shininess:100}));
-  cm.position.set(cx,cy,cz);cm.userData={type:"cat",id:cat.id};
-  pivot.add(cm);clickable.push(cm);catMesh[cat.id]=cm;
-  var gw=new THREE.Mesh(new THREE.SphereGeometry(20,8,8),
-    new THREE.MeshBasicMaterial({color:pl.h,transparent:true,opacity:0.06,side:THREE.BackSide}));
-  gw.position.set(cx,cy,cz);pivot.add(gw);
-  pivot.add(mkTube(new THREE.Vector3(0,0,0),new THREE.Vector3(cx,cy,cz),pl.h,0.45,1.2));
-  catLabels.push({el:mkLbl(cat.id,cat.emoji+" "+cat.label,cat.facts.length+" nodes",pl.c),p:new THREE.Vector3(cx,cy,cz),cat:cat});
-  fibSphere(cat.facts.length,70).forEach(function(fp,fi){
-    var f=cat.facts[fi],wx=cx+fp.x,wy=cy+fp.y,wz=cz+fp.z;
-    factPos3D[f.id]={x:wx,y:wy,z:wz};
-    var fm=new THREE.Mesh(new THREE.SphereGeometry(5,8,8),
-      new THREE.MeshPhongMaterial({color:pl.h,emissive:new THREE.Color(pl.h).multiplyScalar(0.15),transparent:true,opacity:0.8,shininess:60}));
-    fm.position.set(wx,wy,wz);fm.userData={type:"fact",id:f.id};
-    pivot.add(fm);clickable.push(fm);factMesh[f.id]=fm;
-    pivot.add(mkTube(new THREE.Vector3(cx,cy,cz),new THREE.Vector3(wx,wy,wz),pl.h,0.3,0.6));
-  });
-});
-
-Object.keys(CROSS).forEach(function(type){
-  CROSS[type].forEach(function(pair){
-    var p1=factPos3D[pair[0]],p2=factPos3D[pair[1]];if(!p1||!p2)return;
-    var line=mkTube(new THREE.Vector3(p1.x,p1.y,p1.z),new THREE.Vector3(p2.x,p2.y,p2.z),CROSS_INT[type],0.18,0.45);
-    crossLines.push({line:line,pair:pair,type:type});pivot.add(line);
-  });
-});
-
-var selId=null,selType=null,query="";
-var hudNode3D=null;
-
-function catById(id){return CATS.find(function(c){return c.id===id;});}
-function findFact(id){
-  for(var i=0;i<CATS.length;i++){for(var j=0;j<CATS[i].facts.length;j++){if(CATS[i].facts[j].id===id)return{fact:CATS[i].facts[j],cat:CATS[i]};}}return null;
-}
-function getConn(fid){
-  var res=[];
-  Object.keys(CROSS).forEach(function(type){
-    CROSS[type].forEach(function(p){
-      if(p[0]===fid)res.push({id:p[1],type:type});
-      else if(p[1]===fid)res.push({id:p[0],type:type});
-    });
-  });
-  return res;
-}
-
-function tap(id,type,nodePos){
-  if(selId===id&&selType===type){closeHud();return;}
-  selId=id;selType=type;hudNode3D=nodePos?nodePos.clone():null;
-  updateHighlights();renderHud();
-}
-
-function closeHud(){
-  document.getElementById("hud").classList.remove("open");
-  selId=null;selType=null;hudNode3D=null;
-  document.getElementById("cl").setAttribute("stroke-opacity","0");
-  updateHighlights();
-  setTimeout(function(){autoRot=true;},800);
-}
-
-function updateHighlights(){
-  CATS.forEach(function(cat){
-    var cm=catMesh[cat.id],isA=selId===cat.id&&selType==="cat";
-    cm.scale.setScalar(isA?1.3:1);
-    cm.material.emissive=new THREE.Color(PAL[cat.ci].h).multiplyScalar(isA?0.45:0.22);
-    cat.facts.forEach(function(f){
-      var fm=factMesh[f.id],isSel=selId===f.id&&selType==="fact";
-      var inQ=query&&(f.label.toLowerCase().indexOf(query)>=0||f.full.toLowerCase().indexOf(query)>=0);
-      var isRelated=selType==="cat"&&selId===cat.id;
-      fm.scale.setScalar(isSel?2.6:inQ?2:isRelated?1.4:1);
-      fm.material.opacity=isSel?1:inQ?1:isRelated?0.85:query?0.15:0.75;
-    });
-  });
-  crossLines.forEach(function(cl){
-    var isAct=selId&&selType==="fact"&&(selId===cl.pair[0]||selId===cl.pair[1]);
-    var isCat=selId&&selType==="cat"&&CATS.find(function(c){return c.id===selId&&(c.facts.find(function(f){return f.id===cl.pair[0]||f.id===cl.pair[1];})!==undefined);});
-    cl.line.material.opacity=isAct?0.75:isCat?0.38:0.08;
-  });
-}
-
-function renderHud(){
-  var hud=document.getElementById("hud");
-  if(!selId){hud.classList.remove("open");return;}
-  var pl=selType==="cat"?PAL[catById(selId).ci]:selType==="fact"?PAL[findFact(selId).cat.ci]:PAL[0];
-  document.getElementById("hbar").style.background="linear-gradient(to right,"+pl.c+",transparent)";
-  document.getElementById("hcat").style.color=pl.c;
-  var html="";
-  if(selType==="cat"){
-    var cat=catById(selId);
-    document.getElementById("hcat").textContent=cat.emoji+"  "+cat.label.toUpperCase();
-    html='<div class="hlbl">'+cat.facts.length+' memories</div><div class="hgrid">';
-    cat.facts.forEach(function(f){
-      html+='<button class="hfbtn" style="color:'+pl.c+';border-color:'+pl.c+'33" data-fid="'+f.id+'">'+f.label+'</button>';
-    });
-    html+='</div>';
-  } else if(selType==="fact"){
-    var r=findFact(selId),f=r.fact,cat=r.cat;
-    document.getElementById("hcat").textContent=cat.emoji+"  "+cat.label.toUpperCase();
-    var conn=getConn(f.id),connHtml="";
-    if(conn.length){
-      connHtml='<div class="hlbl">connected to</div><div class="hrow">';
-      conn.forEach(function(c){var rr=findFact(c.id);if(!rr)return;connHtml+='<button class="hpill" style="color:'+CROSS_HEX[c.type]+';border-color:'+CROSS_HEX[c.type]+'44" data-fid="'+rr.fact.id+'">'+rr.fact.label+'</button>';});
-      connHtml+='</div>';
-    }
-    html='<div class="hname">'+f.label+'</div>'
-      +'<div class="hfull">'+f.full+'</div>'
-      +connHtml
-      +'<div class="hact"><button class="hcopy" data-copy="'+selId+'">&#128203; copy</button></div>';
-  }
-  document.getElementById("hbody").innerHTML=html;
-  hud.classList.remove("open");void hud.offsetWidth;hud.classList.add("open");
-  autoRot=false;
-}
-
-document.getElementById("hbody").addEventListener("click",function(e){
-  var fid=e.target.closest("[data-fid]");
-  var cp=e.target.closest("[data-copy]");
-  if(fid){
-    var r=findFact(fid.getAttribute("data-fid"));
-    if(r){var fp=factPos3D[r.fact.id];tap(r.fact.id,"fact",new THREE.Vector3(fp.x,fp.y,fp.z));}
-  }
-  if(cp){var r=findFact(cp.getAttribute("data-copy"));if(r)navigator.clipboard&&navigator.clipboard.writeText(r.fact.full).catch(function(){});}
-});
-
-function posHud(){
-  var hud=document.getElementById("hud");
-  if(!hudNode3D||!hud.classList.contains("open"))return;
-  var wv=hudNode3D.clone();pivot.localToWorld(wv);
-  var p=to2D(wv);
-  if(p.z>1){hud.style.opacity="0";return;}
-  hud.style.opacity="1";
-  var sw=wrap.clientWidth,sh=wrap.clientHeight,cw=252,ch=hud.offsetHeight||200,mg=12;
-  var x=p.x+30+cw+mg<=sw?p.x+30:(p.x-30-cw-mg>=0?p.x-30-cw:Math.max(mg,Math.min(p.x-cw/2,sw-cw-mg)));
-  var y=Math.max(mg,Math.min(p.y-ch/2,sh-ch-mg));
-  hud.style.left=x+"px";hud.style.top=y+"px";
-  var ex=x>p.x?x:x+cw;
-  var cat=selType==="cat"?catById(selId):selType==="fact"?findFact(selId).cat:null;
-  var col=cat?PAL[cat.ci].c:"#a78bfa";
-  var cl=document.getElementById("cl");
-  cl.setAttribute("x1",p.x);cl.setAttribute("y1",p.y);cl.setAttribute("x2",ex);cl.setAttribute("y2",y+ch/2);
-  cl.setAttribute("stroke",col);cl.setAttribute("stroke-width","1");
-  cl.setAttribute("stroke-opacity","0.35");cl.setAttribute("stroke-dasharray","4 5");
-}
-
-var rc=new THREE.Raycaster(),mouse=new THREE.Vector2();
-function handleClick(cx,cy){
-  var rect=wrap.getBoundingClientRect();
-  mouse.x=((cx-rect.left)/rect.width)*2-1;
-  mouse.y=-((cy-rect.top)/rect.height)*2+1;
-  rc.setFromCamera(mouse,camera);
-  var hits=rc.intersectObjects(clickable);
-  if(!hits.length)return;
-  var ud=hits[0].object.userData;
-  document.getElementById("hint").style.opacity="0";
-  if(ud.type==="cat")tap(ud.id,"cat",hits[0].object.position);
-  else if(ud.type==="fact")tap(ud.id,"fact",hits[0].object.position);
-}
-
-var rotX=0,rotY=0,autoRot=true;
-var mSX=0,mSY=0,mX=0,mY=0,mDown=false,mMov=false;
-wrap.addEventListener("mousedown",function(e){
-  if(e.button!==0)return;
-  mSX=mX=e.clientX;mSY=mY=e.clientY;mDown=true;mMov=false;autoRot=false;
-});
-document.addEventListener("mousemove",function(e){
-  if(!mDown)return;
-  if(Math.abs(e.clientX-mSX)+Math.abs(e.clientY-mSY)>5)mMov=true;
-  rotY+=(e.clientX-mX)*.006;rotX+=(e.clientY-mY)*.006;
-  rotX=Math.max(-1.1,Math.min(1.1,rotX));
-  pivot.rotation.y=rotY;pivot.rotation.x=rotX;
-  mX=e.clientX;mY=e.clientY;
-});
-document.addEventListener("mouseup",function(e){
-  if(!mDown)return;mDown=false;
-  if(!mMov)handleClick(e.clientX,e.clientY);
-  else if(!selId)setTimeout(function(){autoRot=true;},2000);
-});
-wrap.addEventListener("wheel",function(e){camera.position.z=Math.max(200,Math.min(900,camera.position.z+e.deltaY*.5));},{passive:true});
-
-var tSX=0,tSY=0,tX=0,tY=0,tMov=false,pinch0=0;
-wrap.addEventListener("touchstart",function(e){
-  if(e.touches.length===2){
-    var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;
-    pinch0=Math.sqrt(dx*dx+dy*dy);return;
-  }
-  tSX=tX=e.touches[0].clientX;tSY=tY=e.touches[0].clientY;tMov=false;autoRot=false;
-},{passive:true});
-wrap.addEventListener("touchmove",function(e){
-  e.preventDefault();
-  if(e.touches.length===2){
-    var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;
-    var d=Math.sqrt(dx*dx+dy*dy);camera.position.z=Math.max(200,Math.min(900,camera.position.z-(d-pinch0)*.7));pinch0=d;return;
-  }
-  if(Math.abs(e.touches[0].clientX-tSX)+Math.abs(e.touches[0].clientY-tSY)>10)tMov=true;
-  rotY+=(e.touches[0].clientX-tX)*.007;rotX+=(e.touches[0].clientY-tY)*.007;
-  rotX=Math.max(-1.1,Math.min(1.1,rotX));
-  pivot.rotation.y=rotY;pivot.rotation.x=rotX;
-  tX=e.touches[0].clientX;tY=e.touches[0].clientY;
-},{passive:false});
-wrap.addEventListener("touchend",function(e){
-  if(e.target.closest("#hud"))return;
-  e.preventDefault();
-  if(!tMov)handleClick(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
-  else if(!selId)setTimeout(function(){autoRot=true;},2000);
-  tMov=false;
-});
-
-function animate(){
-  requestAnimationFrame(animate);
-  if(autoRot&&!mDown)pivot.rotation.y=rotY+=0.003;
-  pl1.intensity=1.3+Math.sin(Date.now()*.0015)*.5;
-  var bw=new THREE.Vector3(0,0,0);pivot.localToWorld(bw);
-  var bp=to2D(bw);
-  brainLbl.style.display=bp.z<1?"block":"none";
-  if(bp.z<1){brainLbl.style.left=bp.x+"px";brainLbl.style.top=bp.y+"px";}
-  catLabels.forEach(function(cl){
-    var wv=cl.p.clone();pivot.localToWorld(wv);var p2=to2D(wv);
-    cl.el.style.display=p2.z>1?"none":"block";
-    if(p2.z<1){cl.el.style.left=p2.x+"px";cl.el.style.top=p2.y+"px";
-      cl.el.style.opacity=(!selId||selId===cl.cat.id)?"1":"0.35";}
-  });
-  posHud();
-  renderer.render(scene,camera);
-}
-animate();
-
-function doSearch(v){
-  query=v.trim().toLowerCase();
-  document.getElementById("clrBtn").style.display=v?"inline-block":"none";
-  updateHighlights();
-}
-function clearSrch(){document.getElementById("srch").value="";doSearch("");}
-function showModal(){document.getElementById("modal").style.display="flex";}
-function hideModal(){document.getElementById("modal").style.display="none";}
-document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)hideModal();});
-window.addEventListener("resize",function(){W=wrap.clientWidth;H=wrap.clientHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);});
-document.getElementById("sd").textContent=MEMORY_DATA.lastSynced;
-setTimeout(function(){document.getElementById("hint").style.opacity="0";},4000);
-</script>
-</body>
-</html>
+var SUBSUB={
+  p1a:[{id:"p1a1",l:"Android SDK",f:"Android software development kit APIs and tools"},
+       {id:"p1a2",l:"Gradle build",f:"Gradle build system for compiling Android APKs"},
+       {id:"p1a3",l:"OOP patterns",f:"Object-oriented design patterns used in the app"}],
+  p1b:[{id:"p1b1",l:"text.pollinations.ai",f:"OpenAI-compatible text generation endpoint"},
+       {id:"p1b2",l:"image.pollinations.ai",f:"Free image generation from text prompt"},
+       {id:"p1b3",l:"No auth needed",f:"Zero API key — completely free forever"}],
+  p3a:[{id:"p3a1",l:"Chromium shell",f:"Electron wraps Chromium for desktop rendering"},
+       {id:"p3a
