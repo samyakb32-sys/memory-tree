@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>Memory Tree 3D</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.134/build/three.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:#07070f;color:#e2e8f0;font-family:"Space Grotesk",system-ui,sans-serif;overflow:hidden}
@@ -93,58 +93,63 @@ html,body{height:100%;background:#07070f;color:#e2e8f0;font-family:"Space Grotes
 <script>
 var MEMORY_DATA={lastSynced:"2026-07-14",categories:[
 {id:"identity",label:"Identity",emoji:"\u{1F464}",ci:0,facts:[
-{id:"i1",label:"Samyak Bhadke",full:"Full name: Samyak Bhadke"},
-{id:"i2",label:"Nagpur, India",full:"Location: Nagpur, Maharashtra, India"},
-{id:"i3",label:"SB Jain Institute",full:"College: SB Jain Institute of Technology, Management & Research"},
-{id:"i4",label:"CSE 1st yr",full:"First-year CSE student. USN: CS25041"}]},
+{id:"i1",label:"Samyak Bhadke",full:"Yep, that\'s me — Samyak Bhadke. Nice to meet you!"},
+{id:"i2",label:"Nagpur, India",full:"Born and raised in Nagpur, Maharashtra. Orange City wala hoon main."},
+{id:"i3",label:"SB Jain Institute",full:"Padh raha hoon SB Jain Institute of Technology, Management & Research mein — Nagpur ke andar hi hai."},
+{id:"i4",label:"CSE 1st yr",full:"1st year CSE student abhi. Roll number CS25041. Abhi toh sirf shuru hua hai!"}
+]},
 {id:"projects",label:"Projects",emoji:"\u{1F680}",ci:1,facts:[
-{id:"p1",label:"Halcyon AI",full:"Halcyon: Hinglish AI assistant Android app (Java, Pollinations.ai + Groq + Gemini)"},
-{id:"p2",label:"TaskBell v6",full:"TaskBell v6: Android reminder app (Room DB, AlarmManager, live/video bg theme)"},
-{id:"p3",label:"ORBIT DOCK",full:"ORBIT DOCK: Electron + React desktop hub with WebViews + ADB/scrcpy, NSIS installer"},
-{id:"p4",label:"PDF Vault v4",full:"PDF Vault v4: Android PDF manager with AI chat, PdfBox full-text indexing"},
-{id:"p5",label:"Vibewall",full:"Vibewall: Android AI wallpaper generator via Pollinations.ai, Room DB favorites"},
-{id:"p6",label:"Portfolio",full:"Portfolio: samyakb32-sys.github.io/My-Portfolio — single HTML, base64 assets, 3D sphere"},
-{id:"p7",label:"Shoply",full:"Shoply: Supabase marketplace at shoply-phi-ecru.vercel.app (multi-seller + admin)"},
-{id:"p8",label:"SyllaSync",full:"SyllaSync v3.1: student PWA with AI study planner, PYQ explainer, bunk calculator"},
-{id:"p9",label:"TemplateForge",full:"TemplateForge: Canva-like template customization tool with AI suggestions + code export"},
-{id:"p10",label:"Freelancer",full:"Freelancing on Freelancer.in as @SamyakPathan — no-interview preferred"}]},
+{id:"p1",label:"Halcyon AI",full:"Banaya tha ek Hinglish AI assistant Android app — Halcyon. Java mein, Pollinations.ai + Groq + Gemini se powered. Sach mein apni bhasha mein baat karta hai!"},
+{id:"p2",label:"TaskBell v6",full:"Android reminder app hai yeh — TaskBell. Room DB aur AlarmManager use karta hai, aur live video background bhi switch ho jata hai. Kaafi satisfying tha banate waqt."},
+{id:"p3",label:"ORBIT DOCK",full:"Yeh mera desktop hub project hai — Electron + React. Phone screen mirror bhi karta hai ADB/scrcpy se. Windows pe .exe installer bhi bana deta hai NSIS se."},
+{id:"p4",label:"PDF Vault v4",full:"PDF manager banaya Android ke liye — AI se PDF ke saath baat kar sakte ho. PdfBox se full-text search bhi hai. Home screen shortcuts bhi!"},
+{id:"p5",label:"Vibewall",full:"Wallpaper generator app — Pollinations.ai se AI wallpapers banata hai seedha phone pe. Favorites Room DB mein save hote hain."},
+{id:"p6",label:"Portfolio",full:"Mera portfolio — ek hi HTML file mein poora fit hai, base64 assets ke saath. Three.js wala 3D tech sphere hai uspe. GitHub Pages pe live hai."},
+{id:"p7",label:"Shoply",full:"Marketplace banaya — Supabase backend, Vercel pe deploy. Multiple sellers, admin panel sab kuch. shoply-phi-ecru.vercel.app pe dekh sakte ho."},
+{id:"p8",label:"SyllaSync",full:"Students ke liye banaya — AI study planner, PYQ explainer, bunk calculator sab ek jagah. PWA hai toh offline bhi chalega."},
+{id:"p9",label:"TemplateForge",full:"Canva jaisa tool banaya frontend templates ke liye — AI suggestions deta hai, code export bhi kar sakte ho seedha."},
+{id:"p10",label:"Freelancer",full:"Freelancer.in pe @SamyakPathan hoon. No-interview projects prefer karta hoon — seedha kaam, seedha delivery."}
+]},
 {id:"challenge",label:"Challenge",emoji:"\u{1F3C6}",ci:2,facts:[
-{id:"c1",label:"Day 1 Ambient",full:"Day 1 complete: Mood-Based Ambient Room"},
-{id:"c2",label:"Day 2 Code Roast",full:"Day 2 complete: Code Roast Arena"},
-{id:"c3",label:"Day 5 DevForge",full:"Day 5 complete: DevForge IDE"},
-{id:"c4",label:"Day 6 Song",full:"Day 6 complete: Song Meaning Time Capsule"},
-{id:"c5",label:"Day 7 NPC",full:"Day 7 complete: NPC or Main Character? (RPG evaluator)"},
-{id:"c6",label:"Day 8 HabitLoop",full:"Day 8 complete: HabitLoop offline habit tracker PWA"},
-{id:"c7",label:"Day 9 JD Scan",full:"Day 9 complete: JD Bias Scanner"},
-{id:"c8",label:"7/15 done",full:"15-Day Build Challenge: 7 of 15 complete — single-file HTML/CSS/JS + Pollinations.ai"}]},
+{id:"c1",label:"Day 1 — Ambient Room",full:"Pehla din — Mood-Based Ambient Room. Mood detect karo, room atmosphere set ho jaata hai. Done!"},
+{id:"c2",label:"Day 2 — Code Roast",full:"Doosra din — Code Roast Arena. Apna code paste karo, AI roast karega bina mercy ke. Too much fun!"},
+{id:"c3",label:"Day 5 — DevForge IDE",full:"5th din — DevForge IDE. Browser mein hi code editor, AI assistance ke saath. Clean bana."},
+{id:"c4",label:"Day 6 — Song Capsule",full:"6th din — Song Meaning Time Capsule. Gaane ka hidden meaning dhundhta hai. Personal favorite tha yeh."},
+{id:"c5",label:"Day 7 — NPC Quiz",full:"7th din — NPC or Main Character? RPG wala evaluator banaya. Bahut log khele isko!"},
+{id:"c6",label:"Day 8 — HabitLoop",full:"8th din — HabitLoop. Offline PWA, habits track karo, streaks maintain karo. Simple aur clean."},
+{id:"c7",label:"Day 9 — JD Scanner",full:"9th din — JD Bias Scanner. Job descriptions mein hidden biases dhundhta hai. Actually useful lagta hai."},
+{id:"c8",label:"7 of 15 done",full:"Abhi tak 7 days complete kiye 15 mein se — Days 1,2,5,6,7,8,9. Sab single HTML files, Pollinations.ai backend. Chal raha hai!"}
+]},
 {id:"stack",label:"Stack",emoji:"\u2699\uFE0F",ci:3,facts:[
-{id:"s1",label:"Android+Java",full:"Android in Java: main mobile stack (Room DB, AlarmManager, RecyclerView)"},
-{id:"s2",label:"HTML/CSS/JS",full:"Vanilla HTML/CSS/JS: default for single-file projects and 15-Day Challenge"},
-{id:"s3",label:"React+Electron",full:"React + Electron: used for ORBIT DOCK desktop hub"},
-{id:"s4",label:"Pollinations.ai",full:"Pollinations.ai: free keyless AI backend (text + image) — core of all challenge projects"},
-{id:"s5",label:"Groq+Gemini",full:"Groq (llama-3.3-70b) + Gemini API: AI fallbacks alongside Pollinations"},
-{id:"s6",label:"GitHub Pages",full:"GitHub Pages: main deploy — samyakb32-sys (Android), samyakbcse25 (web/college)"},
-{id:"s7",label:"Vercel+Supabase",full:"Vercel + Supabase: used for Shoply marketplace"},
-{id:"s8",label:"Three.js+GSAP",full:"Three.js + GSAP: 3D scenes and scroll animations"}]},
+{id:"s1",label:"Android + Java",full:"Android development Java mein karta hoon — Room DB, AlarmManager, RecyclerView, sab kuch seedha Java mein. OOP properly use karo aur life easy ho jaati hai."},
+{id:"s2",label:"HTML/CSS/JS",full:"Web ke liye mostly vanilla HTML/CSS/JS — 15-day challenge ke saare projects isme hi hain. Koi framework nahi chahiye jab kaam chal jaata hai."},
+{id:"s3",label:"React + Electron",full:"Desktop apps ke liye React + Electron combo use karta hoon — ORBIT DOCK isme hi bana tha."},
+{id:"s4",label:"Pollinations.ai",full:"Mera go-to free AI backend — Pollinations.ai. Text aur image dono. Koi API key nahi, koi paisa nahi, bas seedha kaam karo."},
+{id:"s5",label:"Groq + Gemini",full:"Groq (llama-3.3-70b) aur Google Gemini — ye dono Pollinations.ai ke backup hain jab zaroorat ho."},
+{id:"s6",label:"GitHub Pages",full:"Static sites ke liye GitHub Pages — free hosting, reliable. Do accounts hain: samyakb32-sys Android ke liye, samyakbcse25 web ke liye."},
+{id:"s7",label:"Vercel + Supabase",full:"Shoply ke liye Vercel + Supabase use kiya — serverless deploy aur PostgreSQL backend. Clean combo hai."},
+{id:"s8",label:"Three.js + GSAP",full:"3D aur animations ke liye — Three.js for WebGL scenes, GSAP for smooth scroll animations. Portfolio pe bhi use kiya."}
+]},
 {id:"prefs",label:"Prefs",emoji:"\u{1F3AF}",ci:4,facts:[
-{id:"pr1",label:"Hinglish",full:"Communicates in Hinglish (Hindi-English mix). Claude always responds in Hinglish"},
-{id:"pr2",label:"Phone-first",full:"Phone-first workflow; GitHub Actions for cloud APK builds when laptop unavailable"},
-{id:"pr3",label:"Anime+One Piece",full:"Interests: anime, streetwear aesthetics, One Piece"},
-{id:"pr4",label:"Free APIs",full:"Prefers free/keyless AI APIs — Pollinations.ai is the cornerstone"},
-{id:"pr5",label:"Neutral UI",full:"Standard/neutral styling by default — NOT dark/neon unless specifically asked"},
-{id:"pr6",label:"Freelancer.in",full:"Prefers no-interview freelance on Freelancer.in over Internshala"}]},
+{id:"pr1",label:"Hinglish",full:"Mujhse Hinglish mein baat karo yaar — Hindi-English mix. Zyada natural lagta hai, Claude bhi same mein respond kare toh perfect."},
+{id:"pr2",label:"Phone-first dev",full:"Zyada tar phone pe hi develop karta hoon. Jab laptop nahi hota, GitHub Actions se cloud mein APK build ho jaati hai. Jugaad hai par kaam karta hai!"},
+{id:"pr3",label:"Anime + One Piece",full:"Anime dekhta hoon, streetwear aesthetic pasand hai, aur One Piece — Luffy hi mera motivation hai honestly."},
+{id:"pr4",label:"Free APIs only",full:"Free APIs ki path pe hoon bhai — Pollinations.ai sabse upar. Agar paisa nahi lagta toh kaam karo, lagta hai toh alternative dhundho."},
+{id:"pr5",label:"Neutral UI default",full:"UI dark/neon nahi hoti by default — simple, clean, neutral. Jab specifically bola toh aur baat, warna saada hi rakho."},
+{id:"pr6",label:"Freelancer.in pref",full:"Freelancer.in pe kaam karta hoon — Internshala se better experience raha. No-interview projects seedha milte hain wahan."}
+]},
 {id:"design",label:"Design",emoji:"\u{1F3A8}",ci:5,facts:[
-{id:"d1",label:"animmasterlib",full:"animmasterlib.dev: animation library for page-load and scroll"},
-{id:"d2",label:"skiper-ui",full:"skiper-ui.com: modern UI component library"},
-{id:"d3",label:"vengenceui",full:"vengenceui.com: bold dark UI library"},
-{id:"d4",label:"motionsites.ai",full:"motionsites.ai: 7 signature motions — aurora, fluid, magnetic, noise field"},
-{id:"d5",label:"getdesign.md",full:"getdesign.md: brand design systems and tokens (Vercel, Linear, Framer style)"},
-{id:"d6",label:"21st.dev",full:"21st.dev: featured React UI components"},
-{id:"d7",label:"dialedweb",full:"dialedweb.com: premium agency website reference"},
-{id:"d8",label:"rocket.new",full:"rocket.new/templates: landing page template references"},
-{id:"d9",label:"dotmatrix",full:"dotmatrix.zzzzshawn.cloud: dot matrix loader animations"}]}
-]};
-
+{id:"d1",label:"animmasterlib.dev",full:"Page-load aur scroll animations ke liye — animmasterlib.dev. Pure CSS animations, bahut clean hain."},
+{id:"d2",label:"skiper-ui.com",full:"Modern UI components ke liye reference — skiper-ui.com. React based, Tailwind se styled."},
+{id:"d3",label:"vengenceui.com",full:"Bold dark UI ke liye — vengenceui.com. Jab serious dark vibe chahiye tab yahan aata hoon."},
+{id:"d4",label:"motionsites.ai",full:"7 signature motion patterns hain isme — aurora, fluid, magnetic, noise field. Background animations ke liye gold mine hai."},
+{id:"d5",label:"getdesign.md",full:"Brand design systems aur tokens ke liye — Vercel, Linear, Framer style. Jab professional look chahiye."},
+{id:"d6",label:"21st.dev",full:"Featured React components ka collection — 21st.dev. Community-made, production-ready."},
+{id:"d7",label:"dialedweb.com",full:"Agency websites ka premium reference — dialedweb.com. Dekhta hoon inspiration ke liye."},
+{id:"d8",label:"rocket.new",full:"Landing page templates — rocket.new. Jab fast prototype banana ho tab seedha yahan aao."},
+{id:"d9",label:"dotmatrix loaders",full:"Dot matrix style loader animations — dotmatrix.zzzzshawn.cloud. Unique loading effects ke liye."}
+]}
+]}
 var CROSS={
   tech:[["p1","s4"],["p1","s5"],["p1","s1"],["p2","s1"],["p3","s3"],
         ["p4","s1"],["p5","s1"],["p5","s4"],["p6","s8"],["p6","s6"],
@@ -265,13 +270,361 @@ var SUBS={
       {id:"d5c",l:"Linear style",f:"Linear app-inspired clean aesthetic"}]
 };
 
+var PAL=[
+  {c:"#a78bfa",h:0xa78bfa},{c:"#60a5fa",h:0x60a5fa},{c:"#34d399",h:0x34d399},
+  {c:"#fbbf24",h:0xfbbf24},{c:"#f97316",h:0xf97316},{c:"#f472b6",h:0xf472b6}
+];
 
-var SUBSUB={
-  p1a:[{id:"p1a1",l:"Android SDK",f:"Android software development kit APIs and tools"},
-       {id:"p1a2",l:"Gradle build",f:"Gradle build system for compiling Android APKs"},
-       {id:"p1a3",l:"OOP patterns",f:"Object-oriented design patterns used in the app"}],
-  p1b:[{id:"p1b1",l:"text.pollinations.ai",f:"OpenAI-compatible text generation endpoint"},
-       {id:"p1b2",l:"image.pollinations.ai",f:"Free image generation from text prompt"},
-       {id:"p1b3",l:"No auth needed",f:"Zero API key — completely free forever"}],
-  p3a:[{id:"p3a1",l:"Chromium shell",f:"Electron wraps Chromium for desktop rendering"},
-       {id:"p3a
+var wrap=document.getElementById("wrap");
+var canvas=document.getElementById("c");
+var scene=new THREE.Scene();
+scene.background=new THREE.Color(0x07070f);
+var W=wrap.clientWidth,H=wrap.clientHeight;
+var camera=new THREE.PerspectiveCamera(55,W/H,0.1,5000);
+camera.position.set(0,0,520);
+var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(W,H);
+
+(function(){
+  var a=[],b=[];
+  for(var i=0;i<700;i++)a.push((Math.random()-.5)*2800,(Math.random()-.5)*2800,(Math.random()-.5)*2800);
+  for(var j=0;j<400;j++)b.push((Math.random()-.5)*2400,(Math.random()-.5)*2400,(Math.random()-.5)*2400);
+  var g=new THREE.BufferGeometry(),g2=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(a,3));
+  g2.setAttribute("position",new THREE.Float32BufferAttribute(b,3));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:2.8,transparent:true,opacity:0.9,sizeAttenuation:true})));
+  scene.add(new THREE.Points(g2,new THREE.PointsMaterial({color:0xc4b5fd,size:1.8,transparent:true,opacity:0.7,sizeAttenuation:true})));
+})();
+
+scene.add(new THREE.AmbientLight(0xffffff,0.7));
+var pl1=new THREE.PointLight(0xa78bfa,1.8,700);pl1.position.set(60,120,200);scene.add(pl1);
+(function(){var l2=new THREE.PointLight(0x60a5fa,1.0,500);l2.position.set(-120,-80,150);scene.add(l2);})();
+
+var pivot=new THREE.Group();scene.add(pivot);
+
+var CATS=MEMORY_DATA.categories;
+var clickable=[],catMesh={},factMesh={},catPos3D={},factPos3D={},crossLines=[],catLabels=[];
+var subMeshes=[];
+
+function mkTube(p1,p2,col,op,r){
+  var dir=new THREE.Vector3().subVectors(p2,p1),len=dir.length();
+  if(len<0.01)return new THREE.Object3D();
+  var m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,6,1,false),
+    new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op}));
+  m.position.copy(new THREE.Vector3().addVectors(p1,p2).multiplyScalar(0.5));
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());
+  return m;
+}
+function fibSphere(n,r){
+  var pts=[],phi=Math.PI*(3-Math.sqrt(5));
+  for(var i=0;i<n;i++){
+    var y=1-(i/Math.max(n-1,1))*2,rad=Math.sqrt(Math.max(0,1-y*y)),t=phi*i;
+    pts.push(new THREE.Vector3(r*rad*Math.cos(t),r*y,r*rad*Math.sin(t)));
+  }
+  return pts;
+}
+function mkLbl(id,txt,sub,col){
+  var d=document.createElement("div");d.className="nlbl";d.id="lbl_"+id;
+  d.innerHTML='<div class="nt" style="color:'+col+';border-color:'+col+'33">'+txt+'</div>'+(sub?'<div class="ns">'+sub+'</div>':'');
+  document.getElementById("labels").appendChild(d);return d;
+}
+function to2D(v){
+  var c=v.clone().project(camera);
+  return{x:(c.x*.5+.5)*renderer.domElement.clientWidth,y:(1-(c.y*.5+.5))*renderer.domElement.clientHeight,z:c.z};
+}
+
+(function(){
+  var g=new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(28,32,32),
+    new THREE.MeshPhongMaterial({color:0x4c1d95,emissive:0x2a0864,shininess:80})));
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(40,16,16),
+    new THREE.MeshBasicMaterial({color:0xa78bfa,transparent:true,opacity:0.05,side:THREE.BackSide})));
+  pivot.add(g);
+})();
+var brainLbl=mkLbl("brain","\u{1F9E0} Samyak","core","#a78bfa");
+
+CATS.forEach(function(cat,i){
+  var elev=(i%2===0?1:-1)*28*Math.PI/180,az=(i*60)*Math.PI/180,R=190;
+  var cx=R*Math.cos(elev)*Math.cos(az),cy=R*Math.sin(elev),cz=R*Math.cos(elev)*Math.sin(az);
+  catPos3D[cat.id]={x:cx,y:cy,z:cz};
+  var pl=PAL[cat.ci];
+  var cm=new THREE.Mesh(new THREE.SphereGeometry(14,16,16),
+    new THREE.MeshPhongMaterial({color:pl.h,emissive:new THREE.Color(pl.h).multiplyScalar(0.25),shininess:100}));
+  cm.position.set(cx,cy,cz);cm.userData={type:"cat",id:cat.id};
+  pivot.add(cm);clickable.push(cm);catMesh[cat.id]=cm;
+  var gw=new THREE.Mesh(new THREE.SphereGeometry(20,8,8),
+    new THREE.MeshBasicMaterial({color:pl.h,transparent:true,opacity:0.06,side:THREE.BackSide}));
+  gw.position.set(cx,cy,cz);pivot.add(gw);
+  pivot.add(mkTube(new THREE.Vector3(0,0,0),new THREE.Vector3(cx,cy,cz),pl.h,0.45,1.2));
+  catLabels.push({el:mkLbl(cat.id,cat.emoji+" "+cat.label,cat.facts.length+" nodes",pl.c),p:new THREE.Vector3(cx,cy,cz),cat:cat});
+  fibSphere(cat.facts.length,70).forEach(function(fp,fi){
+    var f=cat.facts[fi],wx=cx+fp.x,wy=cy+fp.y,wz=cz+fp.z;
+    factPos3D[f.id]={x:wx,y:wy,z:wz};
+    var fm=new THREE.Mesh(new THREE.SphereGeometry(5,8,8),
+      new THREE.MeshPhongMaterial({color:pl.h,emissive:new THREE.Color(pl.h).multiplyScalar(0.15),transparent:true,opacity:0.8,shininess:60}));
+    fm.position.set(wx,wy,wz);fm.userData={type:"fact",id:f.id};
+    pivot.add(fm);clickable.push(fm);factMesh[f.id]=fm;
+    pivot.add(mkTube(new THREE.Vector3(cx,cy,cz),new THREE.Vector3(wx,wy,wz),pl.h,0.3,0.6));
+  });
+});
+
+Object.keys(CROSS).forEach(function(type){
+  CROSS[type].forEach(function(pair){
+    var p1=factPos3D[pair[0]],p2=factPos3D[pair[1]];if(!p1||!p2)return;
+    var line=mkTube(new THREE.Vector3(p1.x,p1.y,p1.z),new THREE.Vector3(p2.x,p2.y,p2.z),CROSS_INT[type],0.18,0.45);
+    crossLines.push({line:line,pair:pair,type:type});pivot.add(line);
+  });
+});
+
+var selId=null,selType=null,query="";
+var hudNode3D=null;
+
+function catById(id){return CATS.find(function(c){return c.id===id;});}
+function findFact(id){
+  for(var i=0;i<CATS.length;i++){for(var j=0;j<CATS[i].facts.length;j++){if(CATS[i].facts[j].id===id)return{fact:CATS[i].facts[j],cat:CATS[i]};}}return null;
+}
+function getConn(fid){
+  var res=[];
+  Object.keys(CROSS).forEach(function(type){
+    CROSS[type].forEach(function(p){
+      if(p[0]===fid)res.push({id:p[1],type:type});
+      else if(p[1]===fid)res.push({id:p[0],type:type});
+    });
+  });
+  return res;
+}
+
+function clearSubs(){
+  subMeshes.forEach(function(m){
+    pivot.remove(m);
+    var idx=clickable.indexOf(m);if(idx!==-1)clickable.splice(idx,1);
+  });
+  subMeshes=[];
+}
+function showSubs(factId,fp3){
+  clearSubs();
+  var subs=SUBS[factId];if(!subs||!subs.length)return;
+  var r=findFact(factId);if(!r)return;
+  var pl=PAL[r.cat.ci];
+  var pts=fibSphere(subs.length,44);
+  subs.forEach(function(sub,i){
+    var p=pts[i],wx=fp3.x+p.x,wy=fp3.y+p.y,wz=fp3.z+p.z;
+    var tube=mkTube(new THREE.Vector3(fp3.x,fp3.y,fp3.z),new THREE.Vector3(wx,wy,wz),pl.h,0.35,0.35);
+    pivot.add(tube);subMeshes.push(tube);
+    var sm=new THREE.Mesh(new THREE.SphereGeometry(3.5,8,8),
+      new THREE.MeshPhongMaterial({color:pl.h,emissive:new THREE.Color(pl.h).multiplyScalar(0.35),transparent:true,opacity:0.9,shininess:80}));
+    sm.position.set(wx,wy,wz);
+    sm.userData={type:"sub",id:sub.id,label:sub.l,full:sub.f,parentId:factId};
+    pivot.add(sm);clickable.push(sm);subMeshes.push(sm);
+  });
+}
+function tap(id,type,nodePos){
+  if(selId===id&&selType===type){closeHud();return;}
+  clearSubs();
+  selId=id;selType=type;hudNode3D=nodePos?nodePos.clone():null;
+  if(type==="fact"){var fp=factPos3D[id];if(fp)showSubs(id,new THREE.Vector3(fp.x,fp.y,fp.z));}
+  updateHighlights();renderHud();
+}
+
+function closeHud(){
+  clearSubs();
+  document.getElementById("hud").classList.remove("open");
+  selId=null;selType=null;hudNode3D=null;
+  document.getElementById("cl").setAttribute("stroke-opacity","0");
+  updateHighlights();
+  setTimeout(function(){autoRot=true;},800);
+}
+
+function updateHighlights(){
+  CATS.forEach(function(cat){
+    var cm=catMesh[cat.id],isA=selId===cat.id&&selType==="cat";
+    cm.scale.setScalar(isA?1.3:1);
+    cm.material.emissive=new THREE.Color(PAL[cat.ci].h).multiplyScalar(isA?0.45:0.22);
+    cat.facts.forEach(function(f){
+      var fm=factMesh[f.id],isSel=selId===f.id&&selType==="fact";
+      var inQ=query&&(f.label.toLowerCase().indexOf(query)>=0||f.full.toLowerCase().indexOf(query)>=0);
+      var isRelated=selType==="cat"&&selId===cat.id;
+      fm.scale.setScalar(isSel?2.6:inQ?2:isRelated?1.4:1);
+      fm.material.opacity=isSel?1:inQ?1:isRelated?0.85:query?0.15:0.75;
+    });
+  });
+  crossLines.forEach(function(cl){
+    var isAct=selId&&selType==="fact"&&(selId===cl.pair[0]||selId===cl.pair[1]);
+    var isCat=selId&&selType==="cat"&&CATS.find(function(c){return c.id===selId&&(c.facts.find(function(f){return f.id===cl.pair[0]||f.id===cl.pair[1];})!==undefined);});
+    cl.line.material.opacity=isAct?0.75:isCat?0.38:0.08;
+  });
+}
+
+function renderHud(){
+  var hud=document.getElementById("hud");
+  if(!selId){hud.classList.remove("open");return;}
+  var pl=selType==="cat"?PAL[catById(selId).ci]:selType==="fact"?PAL[findFact(selId).cat.ci]:PAL[0];
+  document.getElementById("hbar").style.background="linear-gradient(to right,"+pl.c+",transparent)";
+  document.getElementById("hcat").style.color=pl.c;
+  var html="";
+  if(selType==="cat"){
+    var cat=catById(selId);
+    document.getElementById("hcat").textContent=cat.emoji+"  "+cat.label.toUpperCase();
+    html='<div class="hlbl">'+cat.facts.length+' memories</div><div class="hgrid">';
+    cat.facts.forEach(function(f){
+      html+='<button class="hfbtn" style="color:'+pl.c+';border-color:'+pl.c+'33" data-fid="'+f.id+'">'+f.label+'</button>';
+    });
+    html+='</div>';
+  } else if(selType==="fact"){
+    var r=findFact(selId),f=r.fact,cat=r.cat;
+    document.getElementById("hcat").textContent=cat.emoji+"  "+cat.label.toUpperCase();
+    var conn=getConn(f.id),connHtml="";
+    if(conn.length){
+      connHtml='<div class="hlbl">connected to</div><div class="hrow">';
+      conn.forEach(function(c){var rr=findFact(c.id);if(!rr)return;connHtml+='<button class="hpill" style="color:'+CROSS_HEX[c.type]+';border-color:'+CROSS_HEX[c.type]+'44" data-fid="'+rr.fact.id+'">'+rr.fact.label+'</button>';});
+      connHtml+='</div>';
+    }
+    html='<div class="hname">'+f.label+'</div>'
+      +'<div class="hfull">'+f.full+'</div>'
+      +connHtml
+      +'<div class="hact"><button class="hcopy" data-copy="'+selId+'">&#128203; copy</button></div>';
+  }
+  if(selType==="sub"){
+    var r2=null;
+    Object.keys(SUBS).forEach(function(k){SUBS[k].forEach(function(s){if(s.id===selId)r2={sub:s,parentId:k};});});
+    if(r2){
+      var pr=findFact(r2.parentId),pl2=pr?PAL[pr.cat.ci]:PAL[0];
+      document.getElementById("hcat").style.color=pl2.c;
+      document.getElementById("hcat").textContent=(pr?pr.cat.emoji+" "+pr.cat.label.toUpperCase()+" / "+pr.fact.label:"");
+      html='<div class="hname">'+r2.sub.l+'</div><div class="hfull">'+r2.sub.f+'</div>';
+    }
+  }
+  document.getElementById("hbody").innerHTML=html;
+  hud.classList.remove("open");void hud.offsetWidth;hud.classList.add("open");
+  autoRot=false;
+}
+
+document.getElementById("hbody").addEventListener("click",function(e){
+  var fid=e.target.closest("[data-fid]");
+  var cp=e.target.closest("[data-copy]");
+  if(fid){
+    var r=findFact(fid.getAttribute("data-fid"));
+    if(r){var fp=factPos3D[r.fact.id];tap(r.fact.id,"fact",new THREE.Vector3(fp.x,fp.y,fp.z));}
+  }
+  if(cp){var r=findFact(cp.getAttribute("data-copy"));if(r)navigator.clipboard&&navigator.clipboard.writeText(r.fact.full).catch(function(){});}
+});
+
+function posHud(){
+  var hud=document.getElementById("hud");
+  if(!hudNode3D||!hud.classList.contains("open"))return;
+  var wv=hudNode3D.clone();pivot.localToWorld(wv);
+  var p=to2D(wv);
+  if(p.z>1){hud.style.opacity="0";return;}
+  hud.style.opacity="1";
+  var sw=wrap.clientWidth,sh=wrap.clientHeight,cw=252,ch=hud.offsetHeight||200,mg=12;
+  var x=p.x+30+cw+mg<=sw?p.x+30:(p.x-30-cw-mg>=0?p.x-30-cw:Math.max(mg,Math.min(p.x-cw/2,sw-cw-mg)));
+  var y=Math.max(mg,Math.min(p.y-ch/2,sh-ch-mg));
+  hud.style.left=x+"px";hud.style.top=y+"px";
+  var ex=x>p.x?x:x+cw;
+  var cat=selType==="cat"?catById(selId):selType==="fact"?findFact(selId).cat:null;
+  var col=cat?PAL[cat.ci].c:"#a78bfa";
+  var cl=document.getElementById("cl");
+  cl.setAttribute("x1",p.x);cl.setAttribute("y1",p.y);cl.setAttribute("x2",ex);cl.setAttribute("y2",y+ch/2);
+  cl.setAttribute("stroke",col);cl.setAttribute("stroke-width","1");
+  cl.setAttribute("stroke-opacity","0.35");cl.setAttribute("stroke-dasharray","4 5");
+}
+
+var rc=new THREE.Raycaster(),mouse=new THREE.Vector2();
+function handleClick(cx,cy){
+  var rect=wrap.getBoundingClientRect();
+  mouse.x=((cx-rect.left)/rect.width)*2-1;
+  mouse.y=-((cy-rect.top)/rect.height)*2+1;
+  rc.setFromCamera(mouse,camera);
+  var hits=rc.intersectObjects(clickable);
+  if(!hits.length)return;
+  var ud=hits[0].object.userData;
+  document.getElementById("hint").style.opacity="0";
+  if(ud.type==="cat")tap(ud.id,"cat",hits[0].object.position);
+  else if(ud.type==="fact")tap(ud.id,"fact",hits[0].object.position);
+  else if(ud.type==="sub"){selId=ud.id;selType="sub";hudNode3D=hits[0].object.position.clone();updateHighlights();renderHud();}
+}
+
+var rotX=0,rotY=0,autoRot=true;
+var mSX=0,mSY=0,mX=0,mY=0,mDown=false,mMov=false;
+wrap.addEventListener("mousedown",function(e){
+  if(e.button!==0)return;
+  mSX=mX=e.clientX;mSY=mY=e.clientY;mDown=true;mMov=false;autoRot=false;
+});
+document.addEventListener("mousemove",function(e){
+  if(!mDown)return;
+  if(Math.abs(e.clientX-mSX)+Math.abs(e.clientY-mSY)>5)mMov=true;
+  rotY+=(e.clientX-mX)*.006;rotX+=(e.clientY-mY)*.006;
+  rotX=Math.max(-1.1,Math.min(1.1,rotX));
+  pivot.rotation.y=rotY;pivot.rotation.x=rotX;
+  mX=e.clientX;mY=e.clientY;
+});
+document.addEventListener("mouseup",function(e){
+  if(!mDown)return;mDown=false;
+  if(!mMov)handleClick(e.clientX,e.clientY);
+  else if(!selId)setTimeout(function(){autoRot=true;},2000);
+});
+wrap.addEventListener("wheel",function(e){camera.position.z=Math.max(200,Math.min(900,camera.position.z+e.deltaY*.5));},{passive:true});
+
+var tSX=0,tSY=0,tX=0,tY=0,tMov=false,pinch0=0;
+wrap.addEventListener("touchstart",function(e){
+  if(e.touches.length===2){
+    var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;
+    pinch0=Math.sqrt(dx*dx+dy*dy);return;
+  }
+  tSX=tX=e.touches[0].clientX;tSY=tY=e.touches[0].clientY;tMov=false;autoRot=false;
+},{passive:true});
+wrap.addEventListener("touchmove",function(e){
+  e.preventDefault();
+  if(e.touches.length===2){
+    var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;
+    var d=Math.sqrt(dx*dx+dy*dy);camera.position.z=Math.max(200,Math.min(900,camera.position.z-(d-pinch0)*.7));pinch0=d;return;
+  }
+  if(Math.abs(e.touches[0].clientX-tSX)+Math.abs(e.touches[0].clientY-tSY)>10)tMov=true;
+  rotY+=(e.touches[0].clientX-tX)*.007;rotX+=(e.touches[0].clientY-tY)*.007;
+  rotX=Math.max(-1.1,Math.min(1.1,rotX));
+  pivot.rotation.y=rotY;pivot.rotation.x=rotX;
+  tX=e.touches[0].clientX;tY=e.touches[0].clientY;
+},{passive:false});
+wrap.addEventListener("touchend",function(e){
+  if(e.target.closest("#hud"))return;
+  e.preventDefault();
+  if(!tMov)handleClick(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
+  else if(!selId)setTimeout(function(){autoRot=true;},2000);
+  tMov=false;
+});
+
+function animate(){
+  requestAnimationFrame(animate);
+  if(autoRot&&!mDown)pivot.rotation.y=rotY+=0.003;
+  pl1.intensity=1.3+Math.sin(Date.now()*.0015)*.5;
+  var bw=new THREE.Vector3(0,0,0);pivot.localToWorld(bw);
+  var bp=to2D(bw);
+  brainLbl.style.display=bp.z<1?"block":"none";
+  if(bp.z<1){brainLbl.style.left=bp.x+"px";brainLbl.style.top=bp.y+"px";}
+  catLabels.forEach(function(cl){
+    var wv=cl.p.clone();pivot.localToWorld(wv);var p2=to2D(wv);
+    cl.el.style.display=p2.z>1?"none":"block";
+    if(p2.z<1){cl.el.style.left=p2.x+"px";cl.el.style.top=p2.y+"px";
+      cl.el.style.opacity=(!selId||selId===cl.cat.id)?"1":"0.35";}
+  });
+  posHud();
+  renderer.render(scene,camera);
+}
+animate();
+
+function doSearch(v){
+  query=v.trim().toLowerCase();
+  document.getElementById("clrBtn").style.display=v?"inline-block":"none";
+  updateHighlights();
+}
+function clearSrch(){document.getElementById("srch").value="";doSearch("");}
+function showModal(){document.getElementById("modal").style.display="flex";}
+function hideModal(){document.getElementById("modal").style.display="none";}
+document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)hideModal();});
+window.addEventListener("resize",function(){W=wrap.clientWidth;H=wrap.clientHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);});
+document.getElementById("sd").textContent=MEMORY_DATA.lastSynced;
+setTimeout(function(){document.getElementById("hint").style.opacity="0";},4000);
+</script>
+</body>
+</html>
