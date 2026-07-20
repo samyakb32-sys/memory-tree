@@ -555,7 +555,6 @@ document.addEventListener("mousemove",function(e){
   if(!mDown)return;
   if(Math.abs(e.clientX-mSX)+Math.abs(e.clientY-mSY)>5)mMov=true;
   rotY+=(e.clientX-mX)*.006;rotX+=(e.clientY-mY)*.006;
-  rotX=Math.max(-1.1,Math.min(1.1,rotX));
   pivot.rotation.y=rotY;pivot.rotation.x=rotX;
   mX=e.clientX;mY=e.clientY;
 });
@@ -582,7 +581,6 @@ wrap.addEventListener("touchmove",function(e){
   }
   if(Math.abs(e.touches[0].clientX-tSX)+Math.abs(e.touches[0].clientY-tSY)>10)tMov=true;
   rotY+=(e.touches[0].clientX-tX)*.007;rotX+=(e.touches[0].clientY-tY)*.007;
-  rotX=Math.max(-1.1,Math.min(1.1,rotX));
   pivot.rotation.y=rotY;pivot.rotation.x=rotX;
   tX=e.touches[0].clientX;tY=e.touches[0].clientY;
 },{passive:false});
